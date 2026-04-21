@@ -1,0 +1,33 @@
+{
+  "name": "SKELETON_PATHWAY__FIRST_DISCLOSER__TARGET_PAIR__LAST_3Y",
+  "macro_frame_family": "MF01_constrained_targetpair_discovery",
+  "macro_frame_family_en": "Constrained target-pair discovery",
+  "macro_frame_family_zh": "受约束靶点对发现",
+  "constraint_signature": "pathway",
+  "operation_type": "first_discloser",
+  "output_type": "target_pair",
+  "time_scope": "last_3y",
+  "signature": "pathway__first_discloser__target_pair__last_3y",
+  "description": "Independent frame skeleton for identifying newly appearing target pairs in the last 3 years under a pathway constraint.",
+  "slots_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    },
+    "years": {
+      "type": "int",
+      "required": false
+    }
+  },
+  "cypher_template": "MATCH (ymax:Year)\nWITH max(ymax.year) AS max_year\nMATCH (pw:Pathway {name: $pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWITH tp, min(y.year) AS first_year, max_year\nWHERE first_year >= max_year - $years + 1\nRETURN tp.name AS target_pair, first_year\nORDER BY first_year DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "Among target pairs related to the Scavenging of heme from plasma pathway, which ones were first disclosed in the last three years?",
+    "Among target pairs related to the FCGR activation pathway, which ones were first disclosed in the last three years?",
+    "Among target pairs related to the ECM proteoglycans pathway, which ones were first disclosed in the last three years?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "NEW_TARGETPAIRS_BY_PATHWAY_3Y"
+  }
+}

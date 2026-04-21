@@ -1,0 +1,11 @@
+{
+  "name": "TOP_TARGETPAIRS_BY_PATENT_COUNT",
+  "description": "Top target pairs ranked by total patent count.",
+  "params_schema": {},
+  "cypher": "MATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent) RETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, target_pair LIMIT 10;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

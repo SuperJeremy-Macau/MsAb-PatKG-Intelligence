@@ -1,0 +1,33 @@
+{
+  "name": "SKELETON_FUNCTION__MEMBER_LOOKUP__ASSIGNEE__YEAR_2024",
+  "macro_frame_family": "MF05_constrained_assignee_discovery",
+  "macro_frame_family_en": "Constrained assignee discovery",
+  "macro_frame_family_zh": "受约束企业发现",
+  "constraint_signature": "function",
+  "operation_type": "member_lookup",
+  "output_type": "assignee",
+  "time_scope": "year_2024",
+  "signature": "function__member_lookup__assignee__year_2024",
+  "description": "Independent frame skeleton for discovering 2024 assignees constrained by functional category.",
+  "slots_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year = $year\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "Which companies entered target pairs containing Angiogenesis_Vascular_Target targets in 2024?",
+    "Which companies entered target pairs containing GammaDelta_T_Cell_Activation_Target targets in 2024?",
+    "Which companies entered target pairs containing Cytokine_Ligand_Target targets in 2024?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "ASSIGNEES_BY_FUNCTION_2024"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "PATENT_PUBLICATIONS_FOR_NEW_ENTRANTS_2024",
+  "description": "Patent publications for new entrants in 2024. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (a:Assignee)<-[:HAS_ASSIGNEE]-(p0:Patent)-[:PUBLISHED_IN]->(y0:Year)\nWITH a, min(y0.year) AS first_year\nWHERE first_year = $year\nMATCH (a)<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year = $year\nRETURN a.name AS assignee, p.pub_no AS patent_publication, y.year AS year\nORDER BY assignee, patent_publication\nLIMIT 100",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "What patent publication numbers were disclosed by those 2024 new entrants?",
+      "For the companies that newly entered in 2024, what patent publication numbers can be identified?",
+      "Which patent publications are associated with those 2024 first-time entrants?"
+    ],
+    "frame_name": "FRAME_PATENT_PUBLICATIONS_FOR_NEW_ENTRANTS_IN_YEAR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

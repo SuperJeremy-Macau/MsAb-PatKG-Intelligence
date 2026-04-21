@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_FUNCTION__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+  "macro_frame_family": "MF01_constrained_targetpair_discovery",
+  "macro_frame_family_en": "Constrained target-pair discovery",
+  "macro_frame_family_zh": "受约束靶点对发现",
+  "constraint_signature": "function",
+  "operation_type": "member_lookup",
+  "output_type": "target_pair",
+  "time_scope": "all_time",
+  "signature": "function__member_lookup__target_pair__all_time",
+  "description": "Independent frame skeleton for discovering target pairs constrained by functional category.",
+  "slots_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nRETURN DISTINCT tp.name AS target_pair\nORDER BY target_pair\nLIMIT 50",
+  "result_schema": {},
+  "examples": [
+    "Which target pairs contain targets in the Apoptosis_Induction_Target category?",
+    "Which target pairs contain targets in the Ion_Channel_Immune_Modulator_Target category?",
+    "Which target pairs contain targets in the Immune_Cell_Subset_Marker_Target category?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TARGETPAIRS_BY_FUNCTION"
+  }
+}

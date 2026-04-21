@@ -1,0 +1,26 @@
+{
+  "name": "TOP_ORIGIN_BY_CAGR_5Y",
+  "description": "Top origin by cagr 5y. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    },
+    "years": {
+      "type": "int",
+      "required": false
+    }
+  },
+  "cypher": "MATCH (ymax:Year)\nWITH max(ymax.year) AS max_year, $years AS recent_years\nWITH max_year, recent_years, max_year - recent_years + 1 AS base_year\nMATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year >= base_year AND y.year <= max_year\nWITH a, base_year, max_year,\n     count(DISTINCT CASE WHEN y.year = base_year THEN p END) AS base_count,\n     count(DISTINCT CASE WHEN y.year = max_year THEN p END) AS last_count\nWHERE base_count > 0 AND last_count > 0 AND max_year > base_year\nRETURN a.name AS assignee,\n       base_count,\n       last_count,\n       ((1.0 * last_count) / base_count) ^ (1.0 / (max_year - base_year)) - 1.0 AS cagr\nORDER BY cagr DESC, last_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Within the China origin group, which organizations or individuals have the highest five-year compound annual growth rate in patent filings?",
+      "Within the US origin group, which organizations or individuals have the highest five-year compound annual growth rate in patent filings?",
+      "Within the Personal origin group, which organizations or individuals have the highest five-year compound annual growth rate in patent filings?"
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_ORIGIN_CAGR_5Y",
+    "source": "core_four_scenarios_20260329"
+  }
+}

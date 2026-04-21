@@ -1,0 +1,22 @@
+{
+  "name": "PATENT_EXISTS_BY_TARGETPAIR",
+  "description": "Patent exists by targetpair. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "tp_name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair {name: $tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)\nOPTIONAL MATCH (p)-[:HAS_ASSIGNEE]->(a:Assignee)\nOPTIONAL MATCH (p)-[:PUBLISHED_IN]->(y:Year)\nRETURN tp.name AS target_pair,\n       count(DISTINCT p) AS patent_count,\n       count(DISTINCT a) AS assignee_count,\n       min(y.year) AS first_year,\n       collect(DISTINCT a.name)[0..10] AS assignees",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Does CD3/CD70 have any published patents?",
+      "Does CD4/CD8A have any published patents?",
+      "Does CTLA4/IL6 have any published patents?"
+    ],
+    "frame_name": "FRAME_TARGETPAIR_PATENT_COVERAGE",
+    "source": "core_four_scenarios_20260329"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_FUNCTION__RANK_BY_FAMILY_COUNT__TARGET_PAIR__ALL_TIME",
+  "macro_frame_family": "MF03_targetpair_ranking_by_family_volume",
+  "macro_frame_family_en": "Target-pair ranking by family volume",
+  "macro_frame_family_zh": "按家族量排序的靶点对排名",
+  "constraint_signature": "function",
+  "operation_type": "rank_by_family_count",
+  "output_type": "target_pair",
+  "time_scope": "all_time",
+  "signature": "function__rank_by_family_count__target_pair__all_time",
+  "description": "Independent frame skeleton for ranking target pairs by family count under a functional constraint.",
+  "slots_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)<-[:HAS_PATENT]-(fam:Family)\nRETURN tp.name AS target_pair, count(DISTINCT fam) AS family_count\nORDER BY family_count DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "Among target pairs related to the NK_Cell_Engagement_Target category, which ones have the most patent families? Please return the top 10.",
+    "Among target pairs related to the B_Cell_Lineage_Target category, which ones have the most patent families? Please return the top 10.",
+    "Among target pairs related to the Disease_Tissue / Cell Surface Anchors category, which ones have the most patent families? Please return the top 10."
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TOP_TARGETPAIRS_BY_FUNCTION_FAMILY_COUNT"
+  }
+}

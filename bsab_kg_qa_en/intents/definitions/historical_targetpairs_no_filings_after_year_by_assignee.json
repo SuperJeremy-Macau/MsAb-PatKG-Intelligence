@@ -1,0 +1,16 @@
+{
+  "name": "HISTORICAL_TARGETPAIRS_NO_FILINGS_AFTER_YEAR_BY_ASSIGNEE",
+  "description": "For an assignee, list target pairs that have historical filings but no filings after a cutoff year.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true },
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (a:Assignee {name:$assignee})<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair) MATCH (p)-[:PUBLISHED_IN]->(y:Year) WITH tp, min(y.year) AS first_year, max(y.year) AS last_year, count(DISTINCT p) AS patent_count WHERE first_year < $year AND last_year <= $year RETURN tp.name AS target_pair, first_year, last_year, patent_count ORDER BY patent_count DESC, target_pair LIMIT 50;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "first_year": "First publication year",
+    "last_year": "Last publication year",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

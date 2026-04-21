@@ -1,0 +1,22 @@
+{
+  "name": "ORIGIN_DIVERSITY_RANKING",
+  "description": "Origin diversity ranking. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)\nRETURN a.name AS assignee, count(DISTINCT tp) AS targetpair_diversity, count(DISTINCT p) AS patent_count\nORDER BY targetpair_diversity DESC, patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "How are organizations or individuals from UK ranked by target-pair diversity?",
+      "How are organizations or individuals from China ranked by target-pair diversity?",
+      "How are organizations or individuals from US ranked by target-pair diversity?"
+    ],
+    "frame_name": "FRAME_ORIGIN_DIVERSITY_RANKING",
+    "source": "core_four_scenarios_20260329"
+  }
+}

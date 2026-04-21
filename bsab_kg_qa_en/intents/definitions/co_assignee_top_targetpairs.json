@@ -1,0 +1,16 @@
+{
+  "name": "CO_ASSIGNEE_TOP_TARGETPAIRS",
+  "description": "List target pairs with the highest co-assigned patent counts.",
+  "params_schema": {},
+  "cypher": "MATCH (p:Patent)-[:HAS_ASSIGNEE]->(a1:Assignee)\nMATCH (p)-[:HAS_ASSIGNEE]->(a2:Assignee)\nWHERE a1.name < a2.name\nMATCH (p)-[:HAS_TARGET_PAIR]->(tp:TargetPair)\nRETURN tp.name AS target_pair, count(DISTINCT p) AS co_patent_count\nORDER BY co_patent_count DESC, target_pair\nLIMIT 50;",
+  "result_schema": {
+    "target_pair": "TargetPair name",
+    "co_patent_count": "Number of co-assigned patents"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which target pairs have the most co-assigned patents?"
+    ]
+  }
+}

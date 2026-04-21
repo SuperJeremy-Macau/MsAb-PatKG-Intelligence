@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_CANCER__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+  "macro_frame_family": "MF01_constrained_targetpair_discovery",
+  "macro_frame_family_en": "Constrained target-pair discovery",
+  "macro_frame_family_zh": "受约束靶点对发现",
+  "constraint_signature": "cancer",
+  "operation_type": "member_lookup",
+  "output_type": "target_pair",
+  "time_scope": "all_time",
+  "signature": "cancer__member_lookup__target_pair__all_time",
+  "description": "Independent frame skeleton for discovering target pairs under a cancer-expression constraint.",
+  "slots_schema": {
+    "cancer": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (t:Target)-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]->(c:Cancer {name: $cancer})\nMATCH (t)<-[:HAS_TARGET]-(tp:TargetPair)\nRETURN DISTINCT tp.name AS target_pair\nORDER BY target_pair\nLIMIT 50",
+  "result_schema": {},
+  "examples": [
+    "For targets that are highly expressed in COAD, what target pairs involve them?",
+    "For targets that are highly expressed in KIRC, what target pairs involve them?",
+    "For targets that are highly expressed in SARC, what target pairs involve them?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TARGETPAIRS_BY_CANCER"
+  }
+}

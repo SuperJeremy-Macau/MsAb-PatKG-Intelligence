@@ -1,0 +1,14 @@
+{
+  "name": "YEARLY_PATENT_COUNTS_BY_ASSIGNEE",
+  "description": "Yearly counts for one assignee.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (a:Assignee {name:$assignee})<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year) RETURN a.name AS assignee, y.year AS year, count(DISTINCT p) AS patent_count ORDER BY year LIMIT 50;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "year": "Year",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

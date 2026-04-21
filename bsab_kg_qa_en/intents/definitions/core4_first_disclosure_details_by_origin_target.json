@@ -1,0 +1,26 @@
+{
+  "name": "FIRST_DISCLOSURE_DETAILS_BY_ORIGIN_TARGET",
+  "description": "First disclosure details by origin target. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    },
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)-[:HAS_TARGET]->(t:Target {symbol: $target})\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWITH o, a, p, tp, y\nORDER BY y.year ASC, p.pub_no ASC\nRETURN o.name AS origin, tp.name AS target_pair, y.year AS first_year, a.name AS assignee, p.pub_no AS patent_publication\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "For the leading combinations from China that contain TLR9, what are the origin, first patent publication year, assignee, and patent publication number for the earliest filing?",
+      "For the leading combinations from US that contain CSPG4, what are the origin, first patent publication year, assignee, and patent publication number for the earliest filing?",
+      "For the leading combinations from Personal that contain BMPR1A, what are the origin, first patent publication year, assignee, and patent publication number for the earliest filing?"
+    ],
+    "frame_name": "FRAME_FIRST_DISCLOSURE_DETAILS_BY_ORIGIN_TARGET",
+    "source": "core_four_scenarios_20260329"
+  }
+}

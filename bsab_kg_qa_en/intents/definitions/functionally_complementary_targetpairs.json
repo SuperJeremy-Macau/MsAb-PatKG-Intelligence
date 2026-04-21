@@ -1,0 +1,17 @@
+{
+  "name": "FUNCTIONALLY_COMPLEMENTARY_TARGETPAIRS",
+  "description": "List target pairs whose targets have different functional categories and show their patent counts.",
+  "params_schema": {},
+  "cypher": "MATCH (tp:TargetPair)-[:HAS_TARGET]->(t1:Target)-[:FUNCTIONED_AS]->(f1:Functional_of_Target)\nMATCH (tp)-[:HAS_TARGET]->(t2:Target)-[:FUNCTIONED_AS]->(f2:Functional_of_Target)\nWHERE t1 <> t2 AND f1.name <> f2.name\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN tp.name AS target_pair, collect(DISTINCT f1.name + ' vs ' + f2.name)[0] AS function_combo, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 50;",
+  "result_schema": {
+    "target_pair": "TargetPair name",
+    "function_combo": "Example functional category combination",
+    "patent_count": "Number of patents linked to the target pair"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which target pairs combine different functional categories?"
+    ]
+  }
+}

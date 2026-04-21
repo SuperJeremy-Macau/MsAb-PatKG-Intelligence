@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_FUNCTION__RANK_BY_PATENT_COUNT__TARGET_PAIR__ALL_TIME",
+  "macro_frame_family": "MF02_targetpair_ranking_by_patent_volume",
+  "macro_frame_family_en": "Target-pair ranking by patent volume",
+  "macro_frame_family_zh": "按专利量排序的靶点对排名",
+  "constraint_signature": "function",
+  "operation_type": "rank_by_patent_count",
+  "output_type": "target_pair",
+  "time_scope": "all_time",
+  "signature": "function__rank_by_patent_count__target_pair__all_time",
+  "description": "Independent frame skeleton for ranking target pairs by patent count under a functional constraint.",
+  "slots_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "Among target pairs related to the GammaDelta_T_Cell_Activation_Target category, which ones have the most patents? Please return the top 10.",
+    "Among target pairs related to the Cytokine_Ligand_Target category, which ones have the most patents? Please return the top 10.",
+    "Among target pairs related to the Cytokine_Receptor_Target category, which ones have the most patents? Please return the top 10."
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TOP_TARGETPAIRS_BY_FUNCTION_PATENT_COUNT"
+  }
+}

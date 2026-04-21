@@ -1,0 +1,22 @@
+{
+  "name": "TOP_TARGETPAIRS_BY_FUNCTION_FAMILY_COUNT",
+  "description": "Top target pairs by functional category family count. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)<-[:HAS_PATENT]-(fam:Family)\nRETURN tp.name AS target_pair, count(DISTINCT fam) AS family_count\nORDER BY family_count DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Among target pairs related to the NK_Cell_Engagement_Target category, which ones have the most patent families? Please return the top 10.",
+      "Among target pairs related to the B_Cell_Lineage_Target category, which ones have the most patent families? Please return the top 10.",
+      "Among target pairs related to the Disease_Tissue / Cell Surface Anchors category, which ones have the most patent families? Please return the top 10."
+    ],
+    "frame_name": "FRAME_TOP_TARGETPAIRS_BY_FAMILY_COUNT_IN_FUNCTION",
+    "source": "core_four_scenarios_20260329"
+  }
+}

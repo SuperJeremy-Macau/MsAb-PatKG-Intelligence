@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_PATHWAY__RANK_BY_FAMILY_COUNT__TARGET_PAIR__ALL_TIME",
+  "macro_frame_family": "MF03_targetpair_ranking_by_family_volume",
+  "macro_frame_family_en": "Target-pair ranking by family volume",
+  "macro_frame_family_zh": "按家族量排序的靶点对排名",
+  "constraint_signature": "pathway",
+  "operation_type": "rank_by_family_count",
+  "output_type": "target_pair",
+  "time_scope": "all_time",
+  "signature": "pathway__rank_by_family_count__target_pair__all_time",
+  "description": "Independent frame skeleton for ranking target pairs by family count under a pathway constraint.",
+  "slots_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (pw:Pathway {name: $pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)<-[:HAS_PATENT]-(fam:Family)\nRETURN tp.name AS target_pair, count(DISTINCT fam) AS family_count\nORDER BY family_count DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "Among target pairs related to the Signaling by Overexpressed Wild-Type EGFR in Cancer pathway, which ones have the most patent families? Please return the top 10.",
+    "Among target pairs related to the CD28 dependent PI3K/Akt signaling pathway, which ones have the most patent families? Please return the top 10.",
+    "Among target pairs related to the MET activates PTPN11 pathway, which ones have the most patent families? Please return the top 10."
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TOP_TARGETPAIRS_BY_PATHWAY_FAMILY_COUNT"
+  }
+}

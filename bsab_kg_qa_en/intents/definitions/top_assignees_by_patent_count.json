@@ -1,0 +1,17 @@
+{
+  "name": "TOP_ASSIGNEES_BY_PATENT_COUNT",
+  "description": "List the top assignees ranked by patent count.",
+  "params_schema": {},
+  "cypher": "MATCH (p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nRETURN a.name AS company, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, company\nLIMIT 10;",
+  "result_schema": {
+    "company": "Assignee name",
+    "patent_count": "Number of patents"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which companies have the most patents?",
+      "List the top 10 assignees by patent count."
+    ]
+  }
+}

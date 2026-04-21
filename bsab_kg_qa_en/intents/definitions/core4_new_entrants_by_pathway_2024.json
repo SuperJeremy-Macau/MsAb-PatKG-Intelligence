@@ -1,0 +1,26 @@
+{
+  "name": "NEW_ENTRANTS_BY_PATHWAY_2024",
+  "description": "New entrants by pathway in 2024. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (pw:Pathway {name: $pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWITH a, min(y.year) AS first_year, count(DISTINCT CASE WHEN y.year = $year THEN p END) AS patent_count_in_year\nWHERE first_year = $year AND patent_count_in_year > 0\nRETURN a.name AS assignee, first_year, patent_count_in_year\nORDER BY patent_count_in_year DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "In 2024, within target-pair combinations related to the MET receptor recycling pathway, which companies were new entrants?",
+      "In 2024, within target-pair combinations related to the FasL/ CD95L signaling pathway, which companies were new entrants?",
+      "In 2024, within target-pair combinations related to the Downstream signaling events of B Cell Receptor (BCR) pathway, which companies were new entrants?"
+    ],
+    "frame_name": "FRAME_NEW_ENTRANTS_BY_PATHWAY_IN_YEAR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

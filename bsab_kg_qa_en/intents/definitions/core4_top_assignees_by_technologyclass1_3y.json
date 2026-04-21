@@ -1,0 +1,26 @@
+{
+  "name": "TOP_ASSIGNEES_BY_TECHCLASS1_3Y",
+  "description": "Top assignees by TechnologyClass1 category last 3 years. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "technologyclass1": {
+      "type": "string",
+      "required": true
+    },
+    "years": {
+      "type": "int",
+      "required": false
+    }
+  },
+  "cypher": "MATCH (ymax:Year)\nWITH max(ymax.year) AS max_year\nMATCH (tc:TechnologyClass1 {name: $technologyclass1})<-[:HAS_TECHNOLOGY_CLASS1]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year >= max_year - $years + 1\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count, count(DISTINCT tp) AS targetpair_count\nORDER BY patent_count DESC, targetpair_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "In the last three years, within the Trans-Bridging Immune Engagers TechnologyClass1 category, which companies published the most patents?",
+      "Over the most recent three-year window, which assignees lead by patent count in the Tumor-Intrinsic Control TechnologyClass1 category?",
+      "In the last three years, which companies lead in Other Immune-Checkpoint-Related Mechanisms target-pair combinations by patent count?"
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_TECHCLASS1_RECENT_YEARS",
+    "source": "technologyclass_extension_20260409"
+  }
+}

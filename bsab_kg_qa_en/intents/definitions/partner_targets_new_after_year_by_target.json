@@ -1,0 +1,15 @@
+{
+  "name": "PARTNER_TARGETS_NEW_AFTER_YEAR_BY_TARGET",
+  "description": "For a target symbol, list partner targets whose pair first appears after the given year.",
+  "params_schema": {
+    "target": { "type": "string", "required": true },
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (t:Target {symbol:$target})<-[:HAS_TARGET]-(tp:TargetPair)-[:HAS_TARGET]->(t2:Target) MATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year) WHERE t2.symbol <> $target WITH t2.symbol AS partner_target, min(y.year) AS first_year, count(DISTINCT p) AS patent_count WHERE first_year > $year RETURN partner_target, first_year, patent_count ORDER BY first_year ASC, patent_count DESC, partner_target LIMIT 50;",
+  "result_schema": {
+    "partner_target": "Partner target symbol",
+    "first_year": "First publication year",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "TARGET_COMBINATIONS_BY_ORIGIN_FUNCTION",
+  "description": "Target combinations by origin functional category. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    },
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)-[:HAS_TARGET]->(t:Target)-[:FUNCTIONED_AS]->(f:Functional_of_Target {name: $functional_of_target})\nRETURN DISTINCT tp.name AS target_pair, collect(DISTINCT a.name)[0..5] AS assignees, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "For leading patents from China that involve Disease_Tissue / Cell Surface Anchors, what target-pair combinations are covered?",
+      "For leading patents from US that involve Myeloid_Growth_Factor_Axis_Target, what target-pair combinations are covered?",
+      "For leading patents from Personal that involve B_Cell_Survival_and_Differentiation_Target, what target-pair combinations are covered?"
+    ],
+    "frame_name": "FRAME_TARGET_COMBINATIONS_BY_ORIGIN_FUNCTION",
+    "source": "core_four_scenarios_20260329"
+  }
+}

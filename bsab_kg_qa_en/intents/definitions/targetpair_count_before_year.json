@@ -1,0 +1,15 @@
+{
+  "name": "TARGETPAIR_COUNT_BEFORE_YEAR",
+  "description": "Count patents for a target pair before a given year.",
+  "params_schema": {
+    "tp_name": { "type": "string", "required": true },
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year) WHERE y.year < $year RETURN tp.name AS target_pair, $year AS cutoff_year, count(DISTINCT p) AS patent_count LIMIT 1;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "cutoff_year": "Cutoff year",
+    "patent_count": "Patent count before cutoff"
+  },
+  "ui": { "show": false, "examples": [] }
+}

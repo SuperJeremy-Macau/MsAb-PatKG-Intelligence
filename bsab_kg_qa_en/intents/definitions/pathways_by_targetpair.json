@@ -1,0 +1,18 @@
+{
+  "name": "PATHWAYS_BY_TARGETPAIR",
+  "description": "Given a TargetPair, list associated pathways with patent counts.",
+  "params_schema": {
+    "tp_name": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)\nMATCH (tp)-[:HAS_TARGET]->(t:Target)-[:IN_PATHWAY]->(pw:Pathway)\nRETURN pw.name AS pathway, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, pathway ASC\nLIMIT 50;",
+  "result_schema": {
+    "pathway": "Pathway name",
+    "patent_count": "Number of patents linked to targets in the pathway"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which pathways are most associated with PD-1×VEGFA?"
+    ]
+  }
+}

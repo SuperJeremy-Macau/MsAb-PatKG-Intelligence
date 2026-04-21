@@ -1,0 +1,22 @@
+{
+  "name": "FIRST_DISCLOSURE_YEAR_BY_TARGETPAIR",
+  "description": "First disclosure year by targetpair. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "tp_name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair {name: $tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nRETURN tp.name AS target_pair, min(y.year) AS first_year",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "What is the first disclosure year for 4-1BB/5T4?",
+      "What is the first disclosure year for HER3/IGF1R?",
+      "What is the first disclosure year for FZD5/LRP6?"
+    ],
+    "frame_name": "FRAME_FIRST_DISCLOSURE_FOR_TARGETPAIR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

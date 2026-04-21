@@ -1,0 +1,26 @@
+{
+  "name": "ASSIGNEES_BY_PATHWAY_2024",
+  "description": "Assignees by pathway in 2024. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (pw:Pathway {name: $pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year = $year\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which companies entered target-pair combinations containing Lysosome Vesicle Biogenesis targets in 2024?",
+      "Which companies entered target-pair combinations containing Synthesis, secretion, and inactivation of Glucagon-like Peptide-1 (GLP-1) targets in 2024?",
+      "Which companies entered target-pair combinations containing Transcriptional Regulation by VENTX targets in 2024?"
+    ],
+    "frame_name": "FRAME_ASSIGNEES_BY_PATHWAY_IN_YEAR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

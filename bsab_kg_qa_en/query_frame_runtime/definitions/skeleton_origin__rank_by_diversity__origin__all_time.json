@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_ORIGIN__RANK_BY_DIVERSITY__ORIGIN__ALL_TIME",
+  "macro_frame_family": "MF13_origin_level_portfolio_analytics",
+  "macro_frame_family_en": "Origin-level portfolio analytics",
+  "macro_frame_family_zh": "来源地区层面的组合分析",
+  "constraint_signature": "origin",
+  "operation_type": "rank_by_diversity",
+  "output_type": "origin",
+  "time_scope": "all_time",
+  "signature": "origin__rank_by_diversity__origin__all_time",
+  "description": "Independent frame skeleton for origin-level diversity ranking.",
+  "slots_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)\nRETURN a.name AS assignee, count(DISTINCT tp) AS targetpair_diversity, count(DISTINCT p) AS patent_count\nORDER BY targetpair_diversity DESC, patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "How are organizations or individuals from UK ranked by target-pair diversity?",
+    "How are organizations or individuals from China ranked by target-pair diversity?",
+    "How are organizations or individuals from US ranked by target-pair diversity?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "ORIGIN_DIVERSITY_RANKING"
+  }
+}

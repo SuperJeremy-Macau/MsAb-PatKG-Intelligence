@@ -1,0 +1,14 @@
+{
+  "name": "TARGETPAIRS_ASSIGNEE_DIVERSITY_GROWTH_AFTER_YEAR",
+  "description": "Target pairs with high assignee diversity after a given year.",
+  "params_schema": {
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (p:Patent)-[:PUBLISHED_IN]->(y:Year) WHERE y.year > $year MATCH (p)-[:HAS_TARGET_PAIR]->(tp:TargetPair) MATCH (p)-[:HAS_ASSIGNEE]->(a:Assignee) RETURN tp.name AS target_pair, count(DISTINCT a) AS assignee_count_after_year, count(DISTINCT p) AS patent_count_after_year ORDER BY assignee_count_after_year DESC, patent_count_after_year DESC, target_pair LIMIT 20;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "assignee_count_after_year": "Distinct assignees after year",
+    "patent_count_after_year": "Patent count after year"
+  },
+  "ui": { "show": false, "examples": [] }
+}

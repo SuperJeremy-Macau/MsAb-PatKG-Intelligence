@@ -1,0 +1,22 @@
+{
+  "name": "TARGET_COMBINATIONS_FOR_TOP_ASSIGNEE_TARGETPAIRS",
+  "description": "Target combinations for top assignee target pairs. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "years": {
+      "type": "int",
+      "required": false
+    }
+  },
+  "cypher": "MATCH (ymax:Year)\nWITH max(ymax.year) AS max_year\nMATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p0:Patent)-[:PUBLISHED_IN]->(y0:Year)\nWITH tp, min(y0.year) AS first_year, max_year\nWHERE first_year >= max_year - $years + 1\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nWITH a, tp, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC\nWITH a, collect(DISTINCT tp.name)[0..10] AS target_pairs, count(DISTINCT tp) AS emerging_targetpair_count\nRETURN a.name AS assignee, emerging_targetpair_count, target_pairs\nORDER BY emerging_targetpair_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "For the novel combinations associated with those highly active companies, what exact target pairs do they include?",
+      "Which exact target-pair combinations are present among the novel combinations linked to those highly active companies?",
+      "What are the concrete target-pair identities behind the novel combinations of those highly active companies?"
+    ],
+    "frame_name": "FRAME_TARGET_COMBINATIONS_FOR_TOP_ASSIGNEE_TARGETPAIRS",
+    "source": "core_four_scenarios_20260329"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "TREND_BY_TARGETPAIR",
+  "description": "Given a TargetPair, return yearly patent counts and cumulative counts over time.",
+  "params_schema": {
+    "tp_name": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWITH y.year AS year, count(p) AS yearly\nORDER BY year\nWITH collect({year:year, yearly:yearly}) AS rows\nUNWIND range(0, size(rows)-1) AS i\nWITH rows[i] AS row,\n     reduce(total = 0, r IN rows[0..i+1] | total + r.yearly) AS cumulative\nRETURN row.year AS year, row.yearly AS yearly_count, cumulative\nORDER BY year\nLIMIT 50;",
+  "result_schema": {
+    "year": "Year",
+    "yearly_count": "Patents in the year",
+    "cumulative": "Cumulative patents"
+  },
+  "ui": {
+    "show": true,
+    "examples": ["How has the PD-1×VEGFA patent landscape evolved over recent years?"]
+  }
+}

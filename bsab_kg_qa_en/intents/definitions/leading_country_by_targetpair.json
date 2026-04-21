@@ -1,0 +1,17 @@
+{
+  "name": "LEADING_COUNTRY_BY_TARGETPAIR",
+  "description": "Given a TargetPair, rank countries/regions by patent counts based on assignee origin.",
+  "params_schema": {
+    "tp_name": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)\nMATCH (p)-[:HAS_ASSIGNEE]->(a:Assignee)-[:ORIGIN_FROM]->(o:Origin)\nRETURN o.name AS origin, count(DISTINCT p) AS patent_count, min(p.pub_no) AS example_patent\nORDER BY patent_count DESC\nLIMIT 50;",
+  "result_schema": {
+    "origin": "Country/region",
+    "patent_count": "Number of patents",
+    "example_patent": "Example publication number"
+  },
+  "ui": {
+    "show": true,
+    "examples": ["Which country is leading in PD-1×VEGFA patents?"]
+  }
+}

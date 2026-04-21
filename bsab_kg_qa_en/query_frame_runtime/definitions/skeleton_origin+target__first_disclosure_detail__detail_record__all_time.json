@@ -1,0 +1,33 @@
+{
+  "name": "SKELETON_ORIGIN+TARGET__FIRST_DISCLOSURE_DETAIL__DETAIL_RECORD__ALL_TIME",
+  "macro_frame_family": "MF14_first_disclosure_detail_lookup",
+  "macro_frame_family_en": "First-disclosure detail lookup",
+  "macro_frame_family_zh": "首次披露详情查询",
+  "constraint_signature": "origin+target",
+  "operation_type": "first_disclosure_detail",
+  "output_type": "detail_record",
+  "time_scope": "all_time",
+  "signature": "origin+target__first_disclosure_detail__detail_record__all_time",
+  "description": "Independent frame skeleton for first-disclosure detail lookup under origin + target constraints.",
+  "slots_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    },
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)-[:HAS_TARGET]->(t:Target {symbol: $target})\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWITH o, a, p, tp, y\nORDER BY y.year ASC, p.pub_no ASC\nRETURN o.name AS origin, tp.name AS target_pair, y.year AS first_year, a.name AS assignee, p.pub_no AS patent_publication\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "For the leading combinations from China that contain TLR9, what are the origin, first patent publication year, assignee, and patent publication number for the earliest filing?",
+    "For the leading combinations from US that contain CSPG4, what are the origin, first patent publication year, assignee, and patent publication number for the earliest filing?",
+    "For the leading combinations from Personal that contain BMPR1A, what are the origin, first patent publication year, assignee, and patent publication number for the earliest filing?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "FIRST_DISCLOSURE_DETAILS_BY_ORIGIN_TARGET"
+  }
+}

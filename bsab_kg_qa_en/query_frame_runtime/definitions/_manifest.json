@@ -1,0 +1,102 @@
+[
+  {
+    "name": "SKELETON_FUNCTION__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+    "signature": "function__member_lookup__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_function__member_lookup__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_PATHWAY__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+    "signature": "pathway__member_lookup__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_pathway__member_lookup__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_TARGET__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+    "signature": "target__member_lookup__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_target__member_lookup__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_CANCER__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+    "signature": "cancer__member_lookup__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_cancer__member_lookup__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_TECHNOLOGYCLASS1__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+    "signature": "technologyclass1__member_lookup__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_technologyclass1__member_lookup__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_FUNCTION__MEMBER_LOOKUP__ASSIGNEE__ALL_TIME",
+    "signature": "function__member_lookup__assignee__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_function__member_lookup__assignee__all_time.json"
+  },
+  {
+    "name": "SKELETON_FUNCTION__MEMBER_LOOKUP__ASSIGNEE__YEAR_2024",
+    "signature": "function__member_lookup__assignee__year_2024",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_function__member_lookup__assignee__year_2024.json"
+  },
+  {
+    "name": "SKELETON_PATHWAY__MEMBER_LOOKUP__ASSIGNEE__YEAR_2024",
+    "signature": "pathway__member_lookup__assignee__year_2024",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_pathway__member_lookup__assignee__year_2024.json"
+  },
+  {
+    "name": "SKELETON_TARGET__MEMBER_LOOKUP__ASSIGNEE__ALL_TIME",
+    "signature": "target__member_lookup__assignee__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_target__member_lookup__assignee__all_time.json"
+  },
+  {
+    "name": "SKELETON_TECHNOLOGYCLASS1__MEMBER_LOOKUP__ASSIGNEE__ALL_TIME",
+    "signature": "technologyclass1__member_lookup__assignee__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_technologyclass1__member_lookup__assignee__all_time.json"
+  },
+  {
+    "name": "SKELETON_FUNCTION__RANK_BY_PATENT_COUNT__TARGET_PAIR__ALL_TIME",
+    "signature": "function__rank_by_patent_count__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_function__rank_by_patent_count__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_FUNCTION__RANK_BY_FAMILY_COUNT__TARGET_PAIR__ALL_TIME",
+    "signature": "function__rank_by_family_count__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_function__rank_by_family_count__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_PATHWAY__RANK_BY_PATENT_COUNT__TARGET_PAIR__ALL_TIME",
+    "signature": "pathway__rank_by_patent_count__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_pathway__rank_by_patent_count__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_PATHWAY__RANK_BY_FAMILY_COUNT__TARGET_PAIR__ALL_TIME",
+    "signature": "pathway__rank_by_family_count__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_pathway__rank_by_family_count__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_TECHNOLOGYCLASS1__RANK_BY_PATENT_COUNT__TARGET_PAIR__ALL_TIME",
+    "signature": "technologyclass1__rank_by_patent_count__target_pair__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_technologyclass1__rank_by_patent_count__target_pair__all_time.json"
+  },
+  {
+    "name": "SKELETON_FUNCTION__EMERGING_TARGETPAIR_LOOKUP__TARGET_PAIR__YEAR_2024",
+    "signature": "function__emerging_targetpair_lookup__target_pair__year_2024",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_function__emerging_targetpair_lookup__target_pair__year_2024.json"
+  },
+  {
+    "name": "SKELETON_PATHWAY__FIRST_DISCLOSER__TARGET_PAIR__LAST_3Y",
+    "signature": "pathway__first_discloser__target_pair__last_3y",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_pathway__first_discloser__target_pair__last_3y.json"
+  },
+  {
+    "name": "SKELETON_ORIGIN+TARGET__FIRST_DISCLOSURE_DETAIL__DETAIL_RECORD__ALL_TIME",
+    "signature": "origin+target__first_disclosure_detail__detail_record__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_origin+target__first_disclosure_detail__detail_record__all_time.json"
+  },
+  {
+    "name": "SKELETON_ORIGIN__RANK_BY_DIVERSITY__ORIGIN__ALL_TIME",
+    "signature": "origin__rank_by_diversity__origin__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_origin__rank_by_diversity__origin__all_time.json"
+  },
+  {
+    "name": "SKELETON_TARGET+TARGET_PAIR__EXISTENCE__BOOLEAN__ALL_TIME",
+    "signature": "target+target_pair__existence__boolean__all_time",
+    "path": "D:\\Clone-bsab\\BsAb-patent-landscape20260305-LightRAG\\bsab_kg_qa_en\\query_frame_runtime\\definitions\\skeleton_target+target_pair__existence__boolean__all_time.json"
+  }
+]

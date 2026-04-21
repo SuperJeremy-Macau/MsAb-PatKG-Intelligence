@@ -1,0 +1,17 @@
+{
+  "name": "CO_ASSIGNEE_TOP_PAIRS",
+  "description": "List the most frequent co-assignee pairs across all patents.",
+  "params_schema": {},
+  "cypher": "MATCH (p:Patent)-[:HAS_ASSIGNEE]->(a1:Assignee)\nMATCH (p)-[:HAS_ASSIGNEE]->(a2:Assignee)\nWHERE a1.name < a2.name\nRETURN a1.name AS assignee_1, a2.name AS assignee_2, count(DISTINCT p) AS co_patent_count\nORDER BY co_patent_count DESC, assignee_1, assignee_2\nLIMIT 50;",
+  "result_schema": {
+    "assignee_1": "First assignee name",
+    "assignee_2": "Second assignee name",
+    "co_patent_count": "Number of patents co-assigned"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which company pairs most frequently co-assigned patents?"
+    ]
+  }
+}

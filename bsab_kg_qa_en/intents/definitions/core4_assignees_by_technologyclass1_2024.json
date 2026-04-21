@@ -1,0 +1,26 @@
+{
+  "name": "ASSIGNEES_BY_TECHCLASS1_2024",
+  "description": "Assignees by TechnologyClass1 category in 2024. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "technologyclass1": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tc:TechnologyClass1 {name: $technologyclass1})<-[:HAS_TECHNOLOGY_CLASS1]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year = $year\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count, count(DISTINCT tp) AS targetpair_count\nORDER BY patent_count DESC, targetpair_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "In 2024, which companies were active in Trans-Bridging Immune Engagers target-pair combinations?",
+      "For the Angiogenesis related functional combination TechnologyClass1 category, which companies had filings in 2024?",
+      "Which assignees were active in 2024 within the Tumor-Intrinsic Control TechnologyClass1 category?"
+    ],
+    "frame_name": "FRAME_ASSIGNEES_BY_TECHCLASS1_IN_YEAR",
+    "source": "technologyclass_extension_20260409"
+  }
+}

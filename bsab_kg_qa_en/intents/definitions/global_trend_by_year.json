@@ -1,0 +1,17 @@
+{
+  "name": "GLOBAL_TREND_BY_YEAR",
+  "description": "Return yearly patent counts across the entire knowledge graph.",
+  "params_schema": {},
+  "cypher": "MATCH (p:Patent)-[:PUBLISHED_IN]->(y:Year)\nRETURN y.year AS year, count(DISTINCT p) AS patent_count\nORDER BY year\nLIMIT 50;",
+  "result_schema": {
+    "year": "Year",
+    "patent_count": "Number of patents published in the year"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Show the overall yearly patent trend.",
+      "How many patents were published each year?"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "PATENTS_FOR_DOUBLE_HIGH_EXPRESSION_TARGETPAIRS",
+  "description": "Patents for double high expression target pairs. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "cancer": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair)-[:HAS_TARGET]->(t1:Target)-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]->(c:Cancer {name: $cancer})\nMATCH (tp)-[:HAS_TARGET]->(t2:Target)-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]->(c)\nWHERE t1 <> t2\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nOPTIONAL MATCH (p)-[:HAS_ASSIGNEE]->(a:Assignee)\nRETURN DISTINCT tp.name AS target_pair, p.pub_no AS patent_publication, y.year AS year, collect(DISTINCT a.name) AS assignees\nORDER BY year DESC, patent_publication\nLIMIT 100",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "For target pairs whose two targets are both highly expressed in HNSC, what are the patent publication numbers, publication years, and assignees?",
+      "For target pairs whose two targets are both highly expressed in UCS, what are the patent publication numbers, publication years, and assignees?",
+      "For target pairs whose two targets are both highly expressed in PCPG, what are the patent publication numbers, publication years, and assignees?"
+    ],
+    "frame_name": "FRAME_PATENTS_FOR_DOUBLE_HIGH_EXPRESSION_TARGETPAIRS",
+    "source": "core_four_scenarios_20260329"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "PEAK_PUBLICATION_YEAR_BY_ASSIGNEE",
+  "description": "Find the peak publication year for an assignee.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (a:Assignee {name:$assignee})<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year) WITH a.name AS assignee, y.year AS year, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, year ASC RETURN assignee, year, patent_count LIMIT 1;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "year": "Peak year",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

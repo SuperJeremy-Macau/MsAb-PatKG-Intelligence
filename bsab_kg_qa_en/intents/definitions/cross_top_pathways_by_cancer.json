@@ -1,0 +1,21 @@
+{
+  "name": "CROSS_TOP_PATHWAYS_BY_CANCER",
+  "description": "Top pathways by cancer context.",
+  "params_schema": {
+    "cancer": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (c:Cancer {name:$cancer})<-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]-(t:Target)-[:IN_PATHWAY]->(pw:Pathway)<-[:IN_PATHWAY]-(:Target)<-[:HAS_TARGET]-(:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN pw.name AS pathway, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, pathway\nLIMIT 10;",
+  "result_schema": {
+    "pathway": "Pathway",
+    "patent_count": "Patent count"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "某癌种下高频pathway有哪些？"
+    ]
+  }
+}

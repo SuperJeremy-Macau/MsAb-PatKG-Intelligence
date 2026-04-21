@@ -1,0 +1,15 @@
+﻿This folder was prepared as a clean GitHub upload candidate.
+
+Included:
+- Core application package under bsab_kg_qa_en/
+- Sanitized config template and loader
+- Selected non-LightRAG utility scripts under tools/
+- Root README and ignore/upload-scope notes
+
+Excluded:
+- docs/
+- Bsab-related-background/
+- .lightrag_runtime*/
+- __pycache__/ and .pyc
+- tests archives, curated benchmark outputs, temp JSON, and manuscript assets
+- LightRAG-only scripts and runtime outputs

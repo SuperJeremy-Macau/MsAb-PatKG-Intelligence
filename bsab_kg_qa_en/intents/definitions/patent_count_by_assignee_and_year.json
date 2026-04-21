@@ -1,0 +1,15 @@
+{
+  "name": "PATENT_COUNT_BY_ASSIGNEE_AND_YEAR",
+  "description": "Count BsAb patents for a given assignee in one year.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true },
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (a:Assignee {name:$assignee})<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year {year:$year}) RETURN a.name AS assignee, y.year AS year, count(DISTINCT p) AS patent_count LIMIT 1;",
+  "result_schema": {
+    "assignee": "Assignee name",
+    "year": "Year",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

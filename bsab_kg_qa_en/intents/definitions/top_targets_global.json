@@ -1,0 +1,11 @@
+{
+  "name": "TOP_TARGETS_GLOBAL",
+  "description": "Top targets globally by patent frequency.",
+  "params_schema": {},
+  "cypher": "MATCH (p:Patent)-[:HAS_TARGET_PAIR]->(:TargetPair)-[:HAS_TARGET]->(t:Target) RETURN t.symbol AS target, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, target LIMIT 10;",
+  "result_schema": {
+    "target": "Target",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "TARGETPAIRS_OVER_PATENT_THRESHOLD",
+  "description": "List target pairs whose patent count is greater than a threshold (default 50).",
+  "params_schema": {
+    "min_count": { "type": "integer", "required": false }
+  },
+  "cypher": "WITH coalesce($min_count, 50) AS min_count\nMATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)\nWITH tp.name AS target_pair, count(DISTINCT p) AS patent_count, min_count\nWHERE patent_count > min_count\nRETURN target_pair, patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 50;",
+  "result_schema": {
+    "target_pair": "Target pair name",
+    "patent_count": "Number of patents"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which target pairs have more than 50 patents?"
+    ]
+  }
+}

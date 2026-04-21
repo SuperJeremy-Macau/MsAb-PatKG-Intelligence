@@ -1,0 +1,26 @@
+{
+  "name": "TOP_ORIGIN_BY_YOY_2024",
+  "description": "Top origin by yoy in 2024. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year IN [$year - 1, $year]\nRETURN y.year AS year, count(DISTINCT p) AS patent_count\nORDER BY year ASC",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "What is the year-over-year growth rate in 2024 for the China origin group?",
+      "What is the year-over-year growth rate in 2024 for the US origin group?",
+      "What is the year-over-year growth rate in 2024 for the Personal origin group?"
+    ],
+    "frame_name": "FRAME_ORIGIN_YOY_IN_YEAR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

@@ -1,0 +1,6 @@
+openai
+neo4j
+streamlit
+pandas
+openpyxl
+Pillow

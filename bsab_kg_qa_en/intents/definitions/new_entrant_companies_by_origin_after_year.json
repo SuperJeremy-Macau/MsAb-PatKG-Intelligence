@@ -1,0 +1,16 @@
+{
+  "name": "NEW_ENTRANT_COMPANIES_BY_ORIGIN_AFTER_YEAR",
+  "description": "For an origin/country, list companies whose first filing year is after the cutoff and show their main target pairs.",
+  "params_schema": {
+    "origin": { "type": "string", "required": true },
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (o:Origin {name:$origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year) WITH a, min(y.year) AS first_year WHERE first_year > $year MATCH (a)<-[:HAS_ASSIGNEE]-(p2:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair) WITH a.name AS company, first_year, tp.name AS target_pair, count(DISTINCT p2) AS patent_count ORDER BY company, patent_count DESC RETURN company, first_year, target_pair, patent_count LIMIT 50;",
+  "result_schema": {
+    "company": "Assignee",
+    "first_year": "First publication year",
+    "target_pair": "Main target pair",
+    "patent_count": "Patent count on pair"
+  },
+  "ui": { "show": false, "examples": [] }
+}

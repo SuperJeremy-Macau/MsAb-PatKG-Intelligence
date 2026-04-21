@@ -1,0 +1,22 @@
+{
+  "name": "HIGH_EXPRESSION_TARGETS_BY_CANCER",
+  "description": "High expression targets by cancer. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "cancer": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (t:Target)-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]->(c:Cancer {name: $cancer})\nRETURN DISTINCT t.symbol AS target\nORDER BY target\nLIMIT 50",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which targets are highly expressed in KIRP?",
+      "Which targets are highly expressed in MESO?",
+      "Which targets are highly expressed in OV?"
+    ],
+    "frame_name": "FRAME_HIGH_EXPRESSION_TARGETS_BY_CANCER",
+    "source": "core_four_scenarios_20260329"
+  }
+}

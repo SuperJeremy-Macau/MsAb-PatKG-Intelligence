@@ -1,0 +1,22 @@
+{
+  "name": "TOP_TARGETPAIRS_BY_TECHCLASS1_PATENT_COUNT",
+  "description": "Top target pairs by TechnologyClass1 category patent count. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "technologyclass1": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tc:TechnologyClass1 {name: $technologyclass1})<-[:HAS_TECHNOLOGY_CLASS1]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Within the Trans-Bridging Immune Engagers TechnologyClass1 category, which target pairs have the most patents? Please return the top 10.",
+      "For the Tumor-Intrinsic Control TechnologyClass1 category, rank the target pairs by patent count and return the top 10.",
+      "Which target pairs in the Cytokine related functional combination TechnologyClass1 category have the most patents?"
+    ],
+    "frame_name": "FRAME_TOP_TARGETPAIRS_BY_PATENT_COUNT_IN_TECHCLASS1",
+    "source": "technologyclass_extension_20260409"
+  }
+}

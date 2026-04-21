@@ -1,0 +1,22 @@
+{
+  "name": "PATENT_YEARS_BY_TARGETPAIR",
+  "description": "Patent years by targetpair. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "tp_name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair {name: $tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nRETURN y.year AS year, count(DISTINCT p) AS patent_count\nORDER BY year ASC",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "In which years were patents related to B7H4/CDH3 published?",
+      "In which years were patents related to DAG1/LAMA2 published?",
+      "In which years were patents related to CD20/IL12A published?"
+    ],
+    "frame_name": "FRAME_PATENT_YEARS_BY_TARGETPAIR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

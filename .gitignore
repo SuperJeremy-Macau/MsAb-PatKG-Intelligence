@@ -1,0 +1,33 @@
+# Python cache / build artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local config overrides and secrets
+bsab_kg_qa_en/config/settings.local.yaml
+
+# Runtime / experimental outputs
+.lightrag_runtime*/
+lightrag_api_report.txt
+
+# Research material and manuscript assets
+docs/
+Bsab-related-background/
+
+# LightRAG-only tooling and outputs
+tools/__pycache__/
+tools/_lightrag_*.txt
+
+# Test outputs, archives, and temporary files
+bsab_kg_qa_en/tests/__pycache__/
+bsab_kg_qa_en/tests/_archive_20260401/
+bsab_kg_qa_en/tests/_curated_20260401/
+bsab_kg_qa_en/tests/_tmp_*.json
+
+# Local synonym-generation workspace
+bsab_kg_qa_en/ner/synonyms_work/
+
+# Backup / archive code
+bsab_kg_qa_en/core/archive/

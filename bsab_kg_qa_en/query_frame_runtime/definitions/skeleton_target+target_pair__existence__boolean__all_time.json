@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_TARGET+TARGET_PAIR__EXISTENCE__BOOLEAN__ALL_TIME",
+  "macro_frame_family": "MF16_existence_and_boolean_check",
+  "macro_frame_family_en": "Existence and boolean check",
+  "macro_frame_family_zh": "存在性与布尔判断",
+  "constraint_signature": "target+target_pair",
+  "operation_type": "existence",
+  "output_type": "boolean",
+  "time_scope": "all_time",
+  "signature": "target+target_pair__existence__boolean__all_time",
+  "description": "Independent frame skeleton for boolean target-pair existence checks by target.",
+  "slots_schema": {
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (t:Target {symbol: $target})<-[:HAS_TARGET]-(tp:TargetPair)\nRETURN count(DISTINCT tp) AS targetpair_count, collect(DISTINCT tp.name)[0..10] AS example_targetpairs",
+  "result_schema": {},
+  "examples": [
+    "Are there any target-pair combinations that include PRLR?",
+    "Are there any target-pair combinations that include ROR2?",
+    "Are there any target-pair combinations that include NKG2D?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TARGETPAIR_EXISTS_BY_TARGET"
+  }
+}

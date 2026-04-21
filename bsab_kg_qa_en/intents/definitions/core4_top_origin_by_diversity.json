@@ -1,0 +1,22 @@
+{
+  "name": "TOP_ORIGIN_BY_DIVERSITY",
+  "description": "Top origin by diversity. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)\nRETURN a.name AS assignee, count(DISTINCT tp) AS targetpair_diversity, count(DISTINCT p) AS patent_count\nORDER BY targetpair_diversity DESC, patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which organizations or individuals from EU have the greatest diversity of target pairs in their patent filings?",
+      "Which organizations or individuals from Other have the greatest diversity of target pairs in their patent filings?",
+      "Which organizations or individuals from JP have the greatest diversity of target pairs in their patent filings?"
+    ],
+    "frame_name": "FRAME_ORIGIN_DIVERSITY_RANKING",
+    "source": "core_four_scenarios_20260329"
+  }
+}

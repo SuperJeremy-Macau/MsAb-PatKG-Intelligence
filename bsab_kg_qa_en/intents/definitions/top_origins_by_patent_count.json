@@ -1,0 +1,11 @@
+{
+  "name": "TOP_ORIGINS_BY_PATENT_COUNT",
+  "description": "Top countries/origins ranked by total patent count.",
+  "params_schema": {},
+  "cypher": "MATCH (o:Origin)<-[:ORIGIN_FROM]-(:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent) RETURN o.name AS origin, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, origin LIMIT 10;",
+  "result_schema": {
+    "origin": "Origin/Country",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

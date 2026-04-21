@@ -1,0 +1,26 @@
+{
+  "name": "NEW_TARGETPAIRS_BY_FUNCTION_3Y",
+  "description": "New target pairs by functional category last 3 years. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    },
+    "years": {
+      "type": "int",
+      "required": false
+    }
+  },
+  "cypher": "MATCH (ymax:Year)\nWITH max(ymax.year) AS max_year\nMATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWITH tp, min(y.year) AS first_year, max_year\nWHERE first_year >= max_year - $years + 1\nRETURN tp.name AS target_pair, first_year\nORDER BY first_year DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Among target pairs related to the Immune_Cell_Trafficking_Target category, which ones were first disclosed in the last three years?",
+      "Among target pairs related to the Chemokine_Trafficking_Pathway_Target category, which ones were first disclosed in the last three years?",
+      "Among target pairs related to the Complement_Pathway_Target category, which ones were first disclosed in the last three years?"
+    ],
+    "frame_name": "FRAME_FIRST_APPEARING_TARGETPAIRS_IN_FUNCTION",
+    "source": "core_four_scenarios_20260329"
+  }
+}

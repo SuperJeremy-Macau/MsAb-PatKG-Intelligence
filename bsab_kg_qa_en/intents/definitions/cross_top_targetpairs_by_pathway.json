@@ -1,0 +1,21 @@
+{
+  "name": "CROSS_TOP_TARGETPAIRS_BY_PATHWAY",
+  "description": "Top target pairs under a pathway.",
+  "params_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (pw:Pathway {name:$pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 10;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "patent_count": "Patent count"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "某pathway下高频靶点对有哪些？"
+    ]
+  }
+}

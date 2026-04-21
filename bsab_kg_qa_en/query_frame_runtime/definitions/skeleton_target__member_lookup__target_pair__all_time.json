@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_TARGET__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+  "macro_frame_family": "MF01_constrained_targetpair_discovery",
+  "macro_frame_family_en": "Constrained target-pair discovery",
+  "macro_frame_family_zh": "受约束靶点对发现",
+  "constraint_signature": "target",
+  "operation_type": "member_lookup",
+  "output_type": "target_pair",
+  "time_scope": "all_time",
+  "signature": "target__member_lookup__target_pair__all_time",
+  "description": "Independent frame skeleton for discovering target pairs containing a target.",
+  "slots_schema": {
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (t:Target {symbol: $target})<-[:HAS_TARGET]-(tp:TargetPair)\nRETURN DISTINCT tp.name AS target_pair\nORDER BY target_pair\nLIMIT 50",
+  "result_schema": {},
+  "examples": [
+    "What are the specific target-pair combinations that include PDGFB?",
+    "What are the specific target-pair combinations that include WT1?",
+    "What are the specific target-pair combinations that include NECTIN4?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TARGETPAIRS_BY_TARGET"
+  }
+}

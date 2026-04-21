@@ -1,0 +1,14 @@
+{
+  "name": "NEW_TARGETPAIRS_BY_ASSIGNEE_AFTER_YEAR",
+  "description": "For an assignee, list target pairs whose first publication year is after the given year.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true },
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (a:Assignee {name:$assignee})<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair) MATCH (p)-[:PUBLISHED_IN]->(y:Year) WITH tp, min(y.year) AS first_year WHERE first_year > $year RETURN tp.name AS target_pair, first_year ORDER BY first_year ASC, target_pair LIMIT 50;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "first_year": "First publication year"
+  },
+  "ui": { "show": false, "examples": [] }
+}

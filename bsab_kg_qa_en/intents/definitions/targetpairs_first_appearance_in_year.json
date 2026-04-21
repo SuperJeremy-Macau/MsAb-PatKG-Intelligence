@@ -1,0 +1,18 @@
+{
+  "name": "TARGETPAIRS_FIRST_APPEARANCE_IN_YEAR",
+  "description": "List all target pairs whose first-ever patent publication year equals the given year.",
+  "params_schema": {
+    "year": { "type": "integer", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWITH tp, min(y.year) AS first_year\nWHERE first_year = $year\nRETURN tp.name AS target_pair, first_year\nORDER BY target_pair\nLIMIT 50;",
+  "result_schema": {
+    "target_pair": "TargetPair name",
+    "first_year": "First publication year"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which target pairs first appeared in 2024?"
+    ]
+  }
+}

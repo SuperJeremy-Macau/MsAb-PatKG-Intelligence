@@ -1,0 +1,14 @@
+{
+  "name": "COMPANY_RANK_BY_PATENT_COUNT",
+  "description": "Rank of one assignee among all assignees by patent count.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee) WITH a.name AS company, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, company WITH collect({company:company, patent_count:patent_count}) AS rows UNWIND range(0, size(rows)-1) AS idx WITH idx + 1 AS rank, rows[idx] AS r WHERE toLower(r.company) = toLower($assignee) RETURN r.company AS assignee, r.patent_count AS patent_count, rank LIMIT 1;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "patent_count": "Patent count",
+    "rank": "Rank"
+  },
+  "ui": { "show": false, "examples": [] }
+}

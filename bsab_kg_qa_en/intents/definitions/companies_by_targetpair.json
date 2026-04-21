@@ -1,0 +1,17 @@
+{
+  "name": "COMPANIES_BY_TARGETPAIR",
+  "description": "Given a TargetPair, list assignees with their first publication year and patent counts.",
+  "params_schema": {
+    "tp_name": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)\nMATCH (p)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nRETURN a.name AS company, min(y.year) AS first_year, count(DISTINCT p) AS patent_count\nORDER BY first_year ASC, patent_count DESC\nLIMIT 50;",
+  "result_schema": {
+    "company": "Assignee name",
+    "first_year": "First publication year",
+    "patent_count": "Number of patents"
+  },
+  "ui": {
+    "show": true,
+    "examples": ["Which companies have filed patents on PD-1×VEGFA bispecific antibodies?"]
+  }
+}

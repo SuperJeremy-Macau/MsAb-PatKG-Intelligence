@@ -1,0 +1,16 @@
+{
+  "name": "FIRST_PUBLICATION_BY_TARGETPAIR",
+  "description": "Given a TargetPair, return the earliest publication year and example publication numbers in that year.",
+  "params_schema": {
+    "tp_name": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nRETURN y.year AS year, collect(p.pub_no) AS patents\nORDER BY year ASC\nLIMIT 1;",
+  "result_schema": {
+    "year": "Earliest publication year",
+    "patents": "Publication numbers in that year"
+  },
+  "ui": {
+    "show": true,
+    "examples": ["When was the first patent published for PD-1×VEGFA?"]
+  }
+}

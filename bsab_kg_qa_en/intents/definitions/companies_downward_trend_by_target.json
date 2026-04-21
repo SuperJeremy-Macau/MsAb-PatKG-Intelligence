@@ -1,0 +1,18 @@
+{
+  "name": "COMPANIES_DOWNWARD_TREND_BY_TARGET",
+  "description": "Companies with sustained 3-year downward trend for patents involving a target.",
+  "params_schema": {
+    "target": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (t:Target {symbol:$target})<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee) MATCH (p)-[:PUBLISHED_IN]->(y:Year) WITH a, y.year AS year, count(DISTINCT p) AS patent_count ORDER BY a.name, year WITH a, collect({year: year, count: patent_count}) AS trend WITH a, trend, size(trend) AS n WHERE n >= 3 WITH a, trend[n-3] AS p1, trend[n-2] AS p2, trend[n-1] AS p3 WHERE p1.count > p2.count AND p2.count > p3.count RETURN a.name AS assignee, p1.year AS year_1, p1.count AS count_1, p2.year AS year_2, p2.count AS count_2, p3.year AS year_3, p3.count AS count_3 ORDER BY count_3 ASC, assignee LIMIT 20;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "year_1": "Year 1",
+    "count_1": "Count 1",
+    "year_2": "Year 2",
+    "count_2": "Count 2",
+    "year_3": "Year 3",
+    "count_3": "Count 3"
+  },
+  "ui": { "show": false, "examples": [] }
+}

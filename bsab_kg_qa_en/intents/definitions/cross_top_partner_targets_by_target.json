@@ -1,0 +1,21 @@
+{
+  "name": "CROSS_TOP_PARTNER_TARGETS_BY_TARGET",
+  "description": "Top partner targets for a given target.",
+  "params_schema": {
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (t:Target {symbol:$target})<-[:HAS_TARGET]-(tp:TargetPair)-[:HAS_TARGET]->(p2:Target)\nWHERE p2.symbol <> t.symbol\nRETURN p2.symbol AS partner_target, count(DISTINCT tp) AS pair_count\nORDER BY pair_count DESC, partner_target\nLIMIT 10;",
+  "result_schema": {
+    "partner_target": "Partner target",
+    "pair_count": "Pair count"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "PD-1最常见的partner targets是什么？"
+    ]
+  }
+}

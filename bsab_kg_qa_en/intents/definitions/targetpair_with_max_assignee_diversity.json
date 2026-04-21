@@ -1,0 +1,12 @@
+{
+  "name": "TARGETPAIR_WITH_MAX_ASSIGNEE_DIVERSITY",
+  "description": "Target pair with largest number of distinct assignees.",
+  "params_schema": {},
+  "cypher": "MATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee) RETURN tp.name AS target_pair, count(DISTINCT a) AS assignee_count, count(DISTINCT p) AS patent_count ORDER BY assignee_count DESC, patent_count DESC, target_pair LIMIT 1;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "assignee_count": "Distinct assignees",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

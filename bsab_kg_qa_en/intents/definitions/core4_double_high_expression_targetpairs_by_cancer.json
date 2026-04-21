@@ -1,0 +1,22 @@
+{
+  "name": "DOUBLE_HIGH_EXPRESSION_TARGETPAIRS_BY_CANCER",
+  "description": "Double high expression target pairs by cancer. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "cancer": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair)-[:HAS_TARGET]->(t1:Target)-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]->(c:Cancer {name: $cancer})\nMATCH (tp)-[:HAS_TARGET]->(t2:Target)-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]->(c)\nWHERE t1 <> t2\nRETURN DISTINCT tp.name AS target_pair, collect(DISTINCT t1.symbol) + collect(DISTINCT t2.symbol) AS targets\nORDER BY target_pair\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which target pairs contain two targets that are both highly expressed in LUAD?",
+      "Which target pairs contain two targets that are both highly expressed in LUSC?",
+      "Which target pairs contain two targets that are both highly expressed in STAD?"
+    ],
+    "frame_name": "FRAME_DOUBLE_HIGH_EXPRESSION_TARGETPAIRS_BY_CANCER",
+    "source": "core_four_scenarios_20260329"
+  }
+}

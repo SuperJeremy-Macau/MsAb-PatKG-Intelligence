@@ -1,0 +1,26 @@
+{
+  "name": "TOP_ASSIGNEES_BY_PATHWAY_3Y",
+  "description": "Top assignees by pathway last 3 years. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    },
+    "years": {
+      "type": "int",
+      "required": false
+    }
+  },
+  "cypher": "MATCH (ymax:Year)\nWITH max(ymax.year) AS max_year\nMATCH (pw:Pathway {name: $pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year >= max_year - $years + 1\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "In the last three years, within target-pair combinations related to the Metabolism of amino acids and derivatives pathway, which companies published the most patents?",
+      "In the last three years, within target-pair combinations related to the MAP2K and MAPK activation pathway, which companies published the most patents?",
+      "In the last three years, within target-pair combinations related to the Regulation of MITF-M-dependent genes involved in pigmentation pathway, which companies published the most patents?"
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_PATHWAY_RECENT_YEARS",
+    "source": "core_four_scenarios_20260329"
+  }
+}

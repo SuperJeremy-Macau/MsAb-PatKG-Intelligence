@@ -1,0 +1,22 @@
+{
+  "name": "TARGETPAIRS_FOR_NEW_ENTRANTS_2024",
+  "description": "Target pairs for new entrants in 2024. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (a:Assignee)<-[:HAS_ASSIGNEE]-(p0:Patent)-[:PUBLISHED_IN]->(y0:Year)\nWITH a, min(y0.year) AS first_year\nWHERE first_year = $year\nMATCH (a)<-[:HAS_ASSIGNEE]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year = $year\nMATCH (p)-[:HAS_TARGET_PAIR]->(tp:TargetPair)\nRETURN a.name AS assignee, collect(DISTINCT tp.name)[0..10] AS target_pairs, count(DISTINCT tp) AS targetpair_count\nORDER BY targetpair_count DESC, assignee",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "What target-pair combinations are associated with those 2024 new entrants?",
+      "For the companies entering in 2024, which target-pair combinations appear in their filings?",
+      "Which target-pair combinations were covered by those 2024 first-time entrants?"
+    ],
+    "frame_name": "FRAME_TARGETPAIRS_FOR_NEW_ENTRANTS_IN_YEAR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

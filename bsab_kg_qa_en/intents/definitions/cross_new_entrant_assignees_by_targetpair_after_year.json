@@ -1,0 +1,26 @@
+{
+  "name": "CROSS_NEW_ENTRANT_ASSIGNEES_BY_TARGETPAIR_AFTER_YEAR",
+  "description": "New entrant assignees for target pair after a year.",
+  "params_schema": {
+    "tp_name": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "integer",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee), (p)-[:PUBLISHED_IN]->(y:Year)\nWITH tp, a, min(y.year) AS first_year, count(DISTINCT p) AS patent_count\nWHERE first_year > $year\nRETURN a.name AS assignee, first_year, patent_count\nORDER BY patent_count DESC, assignee\nLIMIT 20;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "first_year": "First year",
+    "patent_count": "Patent count"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "某target pair在2022年后有哪些new entrants？"
+    ]
+  }
+}

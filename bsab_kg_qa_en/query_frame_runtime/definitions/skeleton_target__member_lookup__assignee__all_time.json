@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_TARGET__MEMBER_LOOKUP__ASSIGNEE__ALL_TIME",
+  "macro_frame_family": "MF05_constrained_assignee_discovery",
+  "macro_frame_family_en": "Constrained assignee discovery",
+  "macro_frame_family_zh": "受约束企业发现",
+  "constraint_signature": "target",
+  "operation_type": "member_lookup",
+  "output_type": "assignee",
+  "time_scope": "all_time",
+  "signature": "target__member_lookup__assignee__all_time",
+  "description": "Independent frame skeleton for discovering assignees constrained by target.",
+  "slots_schema": {
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (t:Target {symbol: $target})<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "examples": [
+    "Which assignees filed patents involving IL2?",
+    "Which assignees filed patents involving GPA33?",
+    "Which assignees filed patents involving FZD4?"
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "ASSIGNEES_BY_TARGET"
+  }
+}

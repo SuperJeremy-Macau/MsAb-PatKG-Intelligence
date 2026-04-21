@@ -1,0 +1,29 @@
+{
+  "name": "SKELETON_TECHNOLOGYCLASS1__MEMBER_LOOKUP__TARGET_PAIR__ALL_TIME",
+  "macro_frame_family": "MF01_constrained_targetpair_discovery",
+  "macro_frame_family_en": "Constrained target-pair discovery",
+  "macro_frame_family_zh": "受约束靶点对发现",
+  "constraint_signature": "technologyclass1",
+  "operation_type": "member_lookup",
+  "output_type": "target_pair",
+  "time_scope": "all_time",
+  "signature": "technologyclass1__member_lookup__target_pair__all_time",
+  "description": "Independent frame skeleton for discovering target pairs constrained by TechnologyClass1.",
+  "slots_schema": {
+    "technologyclass1": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher_template": "MATCH (tc:TechnologyClass1 {name: $technologyclass1})<-[:HAS_TECHNOLOGY_CLASS1]-(tp:TargetPair)\nRETURN DISTINCT tp.name AS target_pair\nORDER BY target_pair\nLIMIT 50",
+  "result_schema": {},
+  "examples": [
+    "Which target-pair combinations fall under the Trans-Bridging Immune Engagers TechnologyClass1 category?",
+    "Which target-pair combinations belong to the Tumor-Intrinsic Control TechnologyClass1 category?",
+    "Please list the target-pair combinations in the Other functional combination TechnologyClass1 category."
+  ],
+  "notes": {
+    "definition_source": "independent_query_frame_skeleton_v1",
+    "seed_intent_name": "TARGETPAIRS_BY_TECHCLASS1"
+  }
+}

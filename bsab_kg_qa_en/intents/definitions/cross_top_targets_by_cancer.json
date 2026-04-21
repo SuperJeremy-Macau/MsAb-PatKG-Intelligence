@@ -1,0 +1,21 @@
+{
+  "name": "CROSS_TOP_TARGETS_BY_CANCER",
+  "description": "Top targets by cancer context.",
+  "params_schema": {
+    "cancer": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (c:Cancer {name:$cancer})<-[:DIFFERENTIAL_AND_HIGHLY_EXPRESSED_IN]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN t.symbol AS target, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target\nLIMIT 10;",
+  "result_schema": {
+    "target": "Target",
+    "patent_count": "Patent count"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "某癌种下高频靶点有哪些？"
+    ]
+  }
+}

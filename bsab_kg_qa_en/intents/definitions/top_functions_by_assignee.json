@@ -1,0 +1,14 @@
+{
+  "name": "TOP_FUNCTIONS_BY_ASSIGNEE",
+  "description": "Top functional/technology classes for one assignee by patent count.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(:TargetPair)-[:HAS_TARGET]->(:Target)-[:FUNCTIONED_AS]->(f:Functional_of_Target) WHERE toLower(a.name) = toLower($assignee) RETURN a.name AS assignee, f.name AS function, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, function LIMIT 10;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "function": "Functional/technology class",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

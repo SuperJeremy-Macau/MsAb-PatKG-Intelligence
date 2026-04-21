@@ -1,0 +1,10 @@
+{
+  "name": "DISTINCT_TARGETPAIR_COUNT_GLOBAL",
+  "description": "Count all distinct target pairs.",
+  "params_schema": {},
+  "cypher": "MATCH (tp:TargetPair) RETURN count(DISTINCT tp) AS distinct_targetpair_count LIMIT 1;",
+  "result_schema": {
+    "distinct_targetpair_count": "Distinct target pair count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

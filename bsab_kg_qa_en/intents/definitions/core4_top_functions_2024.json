@@ -1,0 +1,22 @@
+{
+  "name": "TOP_FUNCTIONS_2024",
+  "description": "Top functional categorys in 2024. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (f:Functional_of_Target)<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year = $year\nRETURN f.name AS functional_category, count(DISTINCT tp) AS targetpair_count, count(DISTINCT p) AS patent_count, collect(DISTINCT tp.name)[0..5] AS example_targetpairs\nORDER BY targetpair_count DESC, patent_count DESC, functional_category\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Across all target-pair combinations disclosed in 2024, which functional-of-target categories appear most frequently? Please provide the top 10 and example target pairs.",
+      "Within 2024 target-pair combinations, which functional-of-target classes are the most common overall? Please list the top 10 along with representative matching pairs.",
+      "Looking only at target-pair combinations from 2024, what are the top 10 most frequent functional-of-target categories, and what example target pairs correspond to them?"
+    ],
+    "frame_name": "FRAME_TOP_FUNCTIONS_IN_YEAR",
+    "source": "core_four_scenarios_20260329"
+  }
+}

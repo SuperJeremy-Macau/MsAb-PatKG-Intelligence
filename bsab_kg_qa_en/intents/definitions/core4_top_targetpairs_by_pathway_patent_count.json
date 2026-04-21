@@ -1,0 +1,22 @@
+{
+  "name": "TOP_TARGETPAIRS_BY_PATHWAY_PATENT_COUNT",
+  "description": "Top target pairs by pathway patent count. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (pw:Pathway {name: $pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Among target pairs related to the ROS and RNS production in phagocytes pathway, which ones have the most patents? Please return the top 10.",
+      "Among target pairs related to the Formation of the ureteric bud pathway, which ones have the most patents? Please return the top 10.",
+      "Among target pairs related to the Cytokine Signaling in Immune system pathway, which ones have the most patents? Please return the top 10."
+    ],
+    "frame_name": "FRAME_TOP_TARGETPAIRS_BY_PATENT_COUNT_IN_PATHWAY",
+    "source": "core_four_scenarios_20260329"
+  }
+}

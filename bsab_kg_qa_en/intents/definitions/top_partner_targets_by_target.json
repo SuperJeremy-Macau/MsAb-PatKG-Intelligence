@@ -1,0 +1,14 @@
+{
+  "name": "TOP_PARTNER_TARGETS_BY_TARGET",
+  "description": "Top partner targets co-occurring with one anchor target in target pairs, ranked by patent frequency.",
+  "params_schema": {
+    "target": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (t:Target {symbol:$target})<-[:HAS_TARGET]-(tp:TargetPair)-[:HAS_TARGET]->(pt:Target) WHERE pt.symbol <> $target MATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent) RETURN t.symbol AS target, pt.symbol AS partner_target, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, partner_target LIMIT 10;",
+  "result_schema": {
+    "target": "Anchor target",
+    "partner_target": "Partner target",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

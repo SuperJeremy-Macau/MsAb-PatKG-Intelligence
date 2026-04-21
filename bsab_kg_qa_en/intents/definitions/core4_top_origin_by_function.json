@@ -1,0 +1,26 @@
+{
+  "name": "TOP_ORIGIN_BY_FUNCTION",
+  "description": "Top origin by functional category. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    },
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)-[:HAS_TARGET]->(t:Target)-[:FUNCTIONED_AS]->(f:Functional_of_Target {name: $functional_of_target})\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count, count(DISTINCT tp) AS targetpair_count\nORDER BY patent_count DESC, targetpair_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which organizations or individuals from EU lead in target-pair combinations involving Platelet_Engagement_Target targets?",
+      "Which organizations or individuals from Other lead in target-pair combinations involving Innate_Immune_Activation_Target targets?",
+      "Which organizations or individuals from JP lead in target-pair combinations involving NK_Cell_Engagement_Target targets?"
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_ORIGIN_FUNCTION",
+    "source": "core_four_scenarios_20260329"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "TOP_ORIGIN_BY_FIRST_DISCLOSURE_ALL_YEARS",
+  "description": "Top origin by first disclosure all years. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p0:Patent)-[:PUBLISHED_IN]->(y0:Year)\nWITH tp, min(y0.year) AS first_year\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)-[:ORIGIN_FROM]->(o:Origin {name: $origin})\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWHERE y.year = first_year\nRETURN a.name AS assignee, count(DISTINCT tp) AS first_in_class_targetpair_count, min(first_year) AS earliest_first_year\nORDER BY first_in_class_targetpair_count DESC, earliest_first_year ASC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which organizations or individuals from EU disclosed the largest number of first-in-class target-pair combinations across all years?",
+      "Which organizations or individuals from Other disclosed the largest number of first-in-class target-pair combinations across all years?",
+      "Which organizations or individuals from JP disclosed the largest number of first-in-class target-pair combinations across all years?"
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_ORIGIN_FIRST_DISCLOSURE_ALL_YEARS",
+    "source": "core_four_scenarios_20260329"
+  }
+}

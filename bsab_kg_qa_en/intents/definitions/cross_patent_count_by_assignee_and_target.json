@@ -1,0 +1,26 @@
+{
+  "name": "CROSS_PATENT_COUNT_BY_ASSIGNEE_AND_TARGET",
+  "description": "Patent count for a company under a given target.",
+  "params_schema": {
+    "assignee": {
+      "type": "string",
+      "required": true
+    },
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (a:Assignee {name:$assignee})<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)-[:HAS_TARGET]->(t:Target {symbol:$target})\nRETURN a.name AS assignee, t.symbol AS target, count(DISTINCT p) AS patent_count\nLIMIT 1;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "target": "Target",
+    "patent_count": "Patent count"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "3sbio Inc 涉及 PD-1 的专利有多少？"
+    ]
+  }
+}

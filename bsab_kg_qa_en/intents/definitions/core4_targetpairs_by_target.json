@@ -1,0 +1,22 @@
+{
+  "name": "TARGETPAIRS_BY_TARGET",
+  "description": "Target pairs by target. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (t:Target {symbol: $target})<-[:HAS_TARGET]-(tp:TargetPair)\nRETURN DISTINCT tp.name AS target_pair\nORDER BY target_pair\nLIMIT 50",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "What are the specific target-pair combinations that include PDGFB?",
+      "What are the specific target-pair combinations that include WT1?",
+      "What are the specific target-pair combinations that include NECTIN4?"
+    ],
+    "frame_name": "FRAME_DISCOVER_TARGETPAIRS_BY_TARGET",
+    "source": "core_four_scenarios_20260329"
+  }
+}

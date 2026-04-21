@@ -1,0 +1,26 @@
+{
+  "name": "TOP_ASSIGNEES_BY_ORIGIN_TECHCLASS1",
+  "description": "Top origin by TechnologyClass1 category. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "origin": {
+      "type": "string",
+      "required": true
+    },
+    "technologyclass1": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (o:Origin {name: $origin})<-[:ORIGIN_FROM]-(a:Assignee)<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair)-[:HAS_TECHNOLOGY_CLASS1]->(tc:TechnologyClass1 {name: $technologyclass1})\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count, count(DISTINCT tp) AS targetpair_count\nORDER BY patent_count DESC, targetpair_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which organizations or individuals from US lead in Trans-Bridging Immune Engagers target-pair combinations?",
+      "Which organizations or individuals from EU lead in Tumor-Intrinsic Control target-pair combinations?",
+      "Which organizations or individuals from China lead in Other Immune-Checkpoint-Related Mechanisms target-pair combinations?"
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_ORIGIN_TECHCLASS1",
+    "source": "technologyclass_extension_20260409"
+  }
+}

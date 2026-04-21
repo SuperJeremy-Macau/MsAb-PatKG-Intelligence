@@ -1,0 +1,22 @@
+{
+  "name": "CROSS_PATENT_EXISTS_BY_TARGETPAIR",
+  "description": "Check whether a target pair has patents and return representative records.",
+  "params_schema": {
+    "tp_name": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent)\nRETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count, collect(DISTINCT p.pub_no)[0..10] AS sample_pub_nos\nLIMIT 1;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "patent_count": "Patent count",
+    "sample_pub_nos": "Sample pub numbers"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "CD47/IL1RAP 这样的组合是否有专利出现过？"
+    ]
+  }
+}

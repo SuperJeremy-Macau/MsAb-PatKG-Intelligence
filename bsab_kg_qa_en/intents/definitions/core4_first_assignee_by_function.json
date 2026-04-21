@@ -1,0 +1,22 @@
+{
+  "name": "FIRST_ASSIGNEE_BY_FUNCTION",
+  "description": "First assignee by functional category. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p)-[:PUBLISHED_IN]->(y:Year)\nWITH a, min(y.year) AS first_year, count(DISTINCT p) AS patent_count\nRETURN a.name AS assignee, first_year, patent_count\nORDER BY first_year ASC, patent_count DESC, assignee\nLIMIT 1",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Within target-pair combinations related to the Innate_Inflammation_Sensor_Target category, which company disclosed them first?",
+      "Within target-pair combinations related to the Activation_Motif_Tag category, which company disclosed them first?",
+      "Within target-pair combinations related to the TME_Remodeling_Target category, which company disclosed them first?"
+    ],
+    "frame_name": "FRAME_FIRST_ASSIGNEE_BY_FUNCTION",
+    "source": "core_four_scenarios_20260329"
+  }
+}

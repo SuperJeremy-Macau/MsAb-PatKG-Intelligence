@@ -1,0 +1,18 @@
+{
+  "name": "NEW_TARGETPAIRS_RECENT_YEARS",
+  "description": "List target pairs whose first publication is within the most recent N years (default 3).",
+  "params_schema": {
+    "years": { "type": "integer", "required": false }
+  },
+  "cypher": "WITH coalesce($years, 3) AS years\nMATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWITH tp, min(y.year) AS first_year, years\nWITH tp, first_year, years, date().year AS current_year\nWHERE first_year >= (current_year - years + 1)\nRETURN tp.name AS target_pair, first_year\nORDER BY first_year DESC, target_pair\nLIMIT 50;",
+  "result_schema": {
+    "target_pair": "TargetPair name",
+    "first_year": "First publication year"
+  },
+  "ui": {
+    "show": true,
+    "examples": [
+      "Which target pairs first appeared in the last 3 years?"
+    ]
+  }
+}

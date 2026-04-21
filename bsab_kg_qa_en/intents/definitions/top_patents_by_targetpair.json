@@ -1,0 +1,15 @@
+{
+  "name": "TOP_PATENTS_BY_TARGETPAIR",
+  "description": "List top patents for one target pair with assignee and publication year.",
+  "params_schema": {
+    "tp_name": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (tp:TargetPair {name:$tp_name})<-[:HAS_TARGET_PAIR]-(p:Patent) OPTIONAL MATCH (p)-[:HAS_ASSIGNEE]->(a:Assignee) OPTIONAL MATCH (p)-[:PUBLISHED_IN]->(y:Year) RETURN tp.name AS target_pair, p.pub_no AS publication_id, coalesce(a.name,'Unknown') AS assignee, y.year AS year ORDER BY year DESC, publication_id LIMIT 20;",
+  "result_schema": {
+    "target_pair": "Target pair",
+    "publication_id": "Publication ID",
+    "assignee": "Assignee",
+    "year": "Year"
+  },
+  "ui": { "show": false, "examples": [] }
+}

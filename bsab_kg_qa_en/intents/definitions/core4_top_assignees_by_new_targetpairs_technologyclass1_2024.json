@@ -1,0 +1,26 @@
+{
+  "name": "TOP_ASSIGNEES_BY_NEW_TARGETPAIRS_TECHCLASS1_2024",
+  "description": "Top assignees by newly emerging TechnologyClass1 target pairs in 2024.",
+  "params_schema": {
+    "technologyclass1": {
+      "type": "string",
+      "required": true
+    },
+    "year": {
+      "type": "int",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (tc:TechnologyClass1 {name: $technologyclass1})<-[:HAS_TECHNOLOGY_CLASS1]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:PUBLISHED_IN]->(y:Year)\nWITH tp, collect(DISTINCT y.year) AS years\nWHERE size(years) > 0 AND reduce(m = 9999, yr IN years | CASE WHEN yr < m THEN yr ELSE m END) = $year\nMATCH (tp)<-[:HAS_TARGET_PAIR]-(p2:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nMATCH (p2)-[:PUBLISHED_IN]->(y2:Year)\nWHERE y2.year = $year\nRETURN a.name AS assignee, count(DISTINCT tp) AS new_targetpair_count, count(DISTINCT p2) AS patent_count_in_year\nORDER BY new_targetpair_count DESC, patent_count_in_year DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "In 2024, within the Trans-Bridging Immune Engagers TechnologyClass1 category, which companies disclosed the largest number of newly emerging target-pair combinations?",
+      "For the Tumor-Intrinsic Control TechnologyClass1 category, which assignees led by count of newly emerging target pairs in 2024?",
+      "In 2024, who filed the most newly emerging target-pair combinations in the Other functional combination TechnologyClass1 category?"
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_NEW_TARGETPAIRS_IN_TECHCLASS1_YEAR",
+    "source": "technologyclass_extension_20260409"
+  }
+}

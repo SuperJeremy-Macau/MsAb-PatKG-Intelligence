@@ -1,0 +1,15 @@
+{
+  "name": "PATENT_COUNT_BY_ASSIGNEE_AND_TARGETPAIR",
+  "description": "Count patents for one assignee and one target pair.",
+  "params_schema": {
+    "assignee": { "type": "string", "required": true },
+    "tp_name": { "type": "string", "required": true }
+  },
+  "cypher": "MATCH (a:Assignee {name:$assignee})<-[:HAS_ASSIGNEE]-(p:Patent)-[:HAS_TARGET_PAIR]->(tp:TargetPair {name:$tp_name}) RETURN a.name AS assignee, tp.name AS target_pair, count(DISTINCT p) AS patent_count LIMIT 1;",
+  "result_schema": {
+    "assignee": "Assignee",
+    "target_pair": "Target pair",
+    "patent_count": "Patent count"
+  },
+  "ui": { "show": false, "examples": [] }
+}

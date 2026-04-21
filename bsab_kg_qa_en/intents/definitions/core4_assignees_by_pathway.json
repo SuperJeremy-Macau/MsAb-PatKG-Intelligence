@@ -1,0 +1,22 @@
+{
+  "name": "ASSIGNEES_BY_PATHWAY",
+  "description": "Assignees by pathway. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "pathway": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (pw:Pathway {name: $pathway})<-[:IN_PATHWAY]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Which companies have entered target pairs involving the Downstream signaling of activated FGFR2 pathway?",
+      "Which companies have entered target pairs involving the Aspirin ADME pathway?",
+      "Which companies have entered target pairs involving the Activation of Matrix Metalloproteinases pathway?"
+    ],
+    "frame_name": "FRAME_ASSIGNEES_BY_PATHWAY",
+    "source": "core_four_scenarios_20260329"
+  }
+}

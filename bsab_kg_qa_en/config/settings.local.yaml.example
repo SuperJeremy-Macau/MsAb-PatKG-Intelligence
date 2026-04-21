@@ -1,0 +1,33 @@
+# Copy this file to `settings.local.yaml` for local development.
+
+app:
+  title: "Bispecific Antibody (BsAb) Knowledge-Graph QA System"
+  caption: "Neo4j + Intent-Cypher + LLM (KG-Augmented Expert Reasoning)"
+  layout: "wide"
+
+neo4j:
+  uri: "neo4j+s://<your-instance>.databases.neo4j.io"
+  user: "neo4j"
+  password: "<your-password>"
+  database: "neo4j"
+  max_rows: 50
+
+llm:
+  base_url: "https://api.openai.com/v1"
+  api_key_env: "OPENAI_API_KEY"
+  model: "gpt-5.2"
+  temperature_intent: 0.0
+  temperature_answer: 0.2
+  temperature_no_kg: 0.2
+
+props:
+  target_symbol: "symbol"
+  targetpair_name: "name"
+  patent_pub_no: "pub_no"
+  year_value: "year"
+  assignee_name: "name"
+  origin_name: "name"
+
+intent:
+  definitions_dir: "bsab_kg_qa_en/intents/definitions"
+  enable_nl2cypher_fallback: true

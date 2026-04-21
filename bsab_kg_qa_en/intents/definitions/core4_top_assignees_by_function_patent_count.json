@@ -1,0 +1,22 @@
+{
+  "name": "TOP_ASSIGNEES_BY_FUNCTION_PATENT_COUNT",
+  "description": "Top assignees by functional category patent count. Auto-generated from the core-four benchmark and aligned to the validated query-frame Cypher semantics.",
+  "params_schema": {
+    "functional_of_target": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "cypher": "MATCH (f:Functional_of_Target {name: $functional_of_target})<-[:FUNCTIONED_AS]-(t:Target)<-[:HAS_TARGET]-(tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)-[:HAS_ASSIGNEE]->(a:Assignee)\nRETURN a.name AS assignee, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, assignee\nLIMIT 10",
+  "result_schema": {},
+  "ui": {
+    "show": false,
+    "examples": [
+      "Within target-pair combinations related to the Pathologic_Protein_Target category, which companies filed the most patents? Please provide the top 10.",
+      "Within target-pair combinations related to the Innate_Immune_Checkpoint_Target category, which companies filed the most patents? Please provide the top 10.",
+      "Within target-pair combinations related to the T_Cell_Engagement_Target category, which companies filed the most patents? Please provide the top 10."
+    ],
+    "frame_name": "FRAME_TOP_ASSIGNEES_BY_FUNCTION_PATENT_COUNT",
+    "source": "core_four_scenarios_20260329"
+  }
+}
