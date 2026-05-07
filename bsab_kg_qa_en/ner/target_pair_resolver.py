@@ -19,10 +19,10 @@ class TargetPairResolution:
 class TargetPairResolver:
     """
     Human-like entity resolution for TargetPair:
-    1) Extract a pair string from user input (do not hallucinate)
-    2) Split into two target symbols if possible
-    3) Backtrace TargetPair.name via Target.symbol in KG
-    4) Fallback: normalize separators and match by TargetPair.name
+    1) Extract a pair-like surface form from user input (do not hallucinate)
+    2) Split into two target mentions if possible
+    3) Optionally backtrace TargetPair.name via exact Target.symbol match
+    4) Never invent a canonical TargetPair when backtrace fails
     """
 
     def __init__(self, runner: Neo4jRunner, prop_target_symbol: str = "symbol", prop_tp_name: str = "name"):
@@ -32,24 +32,24 @@ class TargetPairResolver:
 
     @staticmethod
     def _extract_pair_text(question: str) -> Optional[str]:
-        m = re.search(r"([A-Za-z0-9\-_]+)\s*[/-]\s*([A-Za-z0-9\-_]+)", question)
+        m = re.search(
+            r"([A-Za-z0-9\-_]+)\s*(?:/|\+| and | AND | x | X | × | plus | PLUS )\s*([A-Za-z0-9\-_]+)",
+            question,
+        )
         if not m:
             return None
         return f"{m.group(1)}/{m.group(2)}"
 
     @staticmethod
     def _split_pair(pair: str) -> Optional[Tuple[str, str]]:
-        s = pair.replace(" ", "")
-        for sep in ["x", "X", "×", "-", "–", "—"]:
-            s = s.replace(sep, "/")
-        parts = [p for p in s.split("/") if p]
+        parts = [
+            p.strip()
+            for p in re.split(r"\s*(?:/|\+|\band\b|\bplus\b|\bx\b|×)\s*", pair.strip(), flags=re.IGNORECASE)
+            if p.strip()
+        ]
         if len(parts) == 2:
             return parts[0], parts[1]
         return None
-
-    @staticmethod
-    def _normalize_to_slash(pair: str) -> str:
-        return pair.replace(" ", "")
 
     def resolve(self, question: str) -> TargetPairResolution:
         raw = self._extract_pair_text(question)
@@ -78,9 +78,9 @@ class TargetPairResolver:
                 )
 
         return TargetPairResolution(
-            tp_name=self._normalize_to_slash(raw),
+            tp_name=None,
             raw=raw,
-            matched_by="separator_normalize",
-            confidence=0.6,
+            matched_by="surface_pair",
+            confidence=0.45,
             targets=targets,
         )

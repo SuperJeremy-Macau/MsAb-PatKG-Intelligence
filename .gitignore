@@ -4,13 +4,24 @@ __pycache__/
 *.pyo
 *.pyd
 .pytest_cache/
+.venv/
+venv/
 
 # Local config overrides and secrets
 bsab_kg_qa_en/config/settings.local.yaml
+bsab_kg_qa_en/config/Local Settings.txt
+*.env
 
 # Runtime / experimental outputs
 .lightrag_runtime*/
 lightrag_api_report.txt
+*.log
+*.err.log
+*.stdout.log
+*.stderr.log
+
+# Large local research outputs
+*.xlsx
 
 # Research material and manuscript assets
 docs/

@@ -15,7 +15,7 @@ neo4j:
 llm:
   base_url: "https://api.openai.com/v1"
   api_key_env: "OPENAI_API_KEY"
-  model: "gpt-5.2"
+  model: "gpt-5.4"
   temperature_intent: 0.0
   temperature_answer: 0.2
   temperature_no_kg: 0.2

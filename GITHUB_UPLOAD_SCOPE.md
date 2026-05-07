@@ -23,7 +23,6 @@ For a clean GitHub upload, keep the repository focused on code that is needed to
 - `bsab_kg_qa_en/ner/`
   - keep runtime code
   - exclude `synonyms_work/`
-- `bsab_kg_qa_en/query_frame_runtime/`
 - `bsab_kg_qa_en/query_rewriting/`
 - `bsab_kg_qa_en/resolvers/`
 - `tools/`

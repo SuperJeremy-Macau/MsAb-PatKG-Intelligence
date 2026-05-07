@@ -9,7 +9,6 @@ from .orchestrator import (
     QueryRewritingNeo4jText2CypherRetriever,
     LLMOnlyOrchestrator,
 )
-from .query_frame_orchestrator import QueryFrameSlotOrchestrator
 
 __all__ = [
     "Orchestrator",
@@ -20,5 +19,4 @@ __all__ = [
     "QueryRewritingHybridIntentCypherOrchestrator",
     "QueryRewritingNeo4jText2CypherRetriever",
     "LLMOnlyOrchestrator",
-    "QueryFrameSlotOrchestrator",
 ]

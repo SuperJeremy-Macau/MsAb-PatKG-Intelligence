@@ -31,7 +31,7 @@ class NodeCatalog:
             f"""
             MATCH (n:{label})
             WHERE n.{prop} IS NOT NULL
-            RETURN toString(n.{prop}) AS canonical, n.aliases AS aliases, n.alias AS alias
+            RETURN toString(n.{prop}) AS canonical, n.aliases AS aliases
             LIMIT 20000
             """,
             enforce_limit=False,
@@ -44,7 +44,7 @@ class NodeCatalog:
                 out.append(canonical)
                 seen.add(canonical)
 
-            aliases = cls._to_list(r.get("aliases")) + cls._to_list(r.get("alias"))
+            aliases = cls._to_list(r.get("aliases"))
             for a in aliases:
                 if a and a not in seen:
                     out.append(a)

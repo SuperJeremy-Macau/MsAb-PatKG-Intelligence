@@ -71,6 +71,22 @@ def _merge_settings(base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str,
     return merged
 
 
+def _apply_env_overrides(settings: Dict[str, Any]) -> Dict[str, Any]:
+    env_map = {
+        ("neo4j", "uri"): "NEO4J_URI",
+        ("neo4j", "user"): "NEO4J_USER",
+        ("neo4j", "password"): "NEO4J_PASSWORD",
+        ("neo4j", "database"): "NEO4J_DATABASE",
+        ("llm", "base_url"): "OPENAI_BASE_URL",
+        ("llm", "model"): "OPENAI_MODEL",
+    }
+    for (section, key), env_name in env_map.items():
+        value = os.getenv(env_name)
+        if value:
+            settings.setdefault(section, {})[key] = value
+    return settings
+
+
 def load_settings(path: str) -> Dict[str, Any]:
     """
     Minimal YAML loader for this project:
@@ -124,4 +140,4 @@ def load_settings(path: str) -> Dict[str, Any]:
     if os.path.exists(local_path):
         root = _merge_settings(root, load_settings(local_path))
 
-    return root
+    return _apply_env_overrides(root)

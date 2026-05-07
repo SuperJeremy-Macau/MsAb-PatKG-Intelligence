@@ -5,7 +5,7 @@ This repository contains a streamlined code-focused subset of a larger local wor
 The main application is a Neo4j-backed QA system that combines:
 - graph retrieval over a BsAb patent knowledge graph
 - intent-based Cypher templates
-- query rewriting and query-frame orchestration
+- query rewriting
 - LLM-based answer synthesis
 
 This upload intentionally excludes manuscript assets, LightRAG experiments, benchmark result archives, runtime caches, and local research materials.
@@ -20,8 +20,8 @@ This upload intentionally excludes manuscript assets, LightRAG experiments, benc
   intent registry and JSON intent definitions
 - `bsab_kg_qa_en/extract/`, `kg/`, `ner/`, `resolvers/`
   graph access and entity resolution
-- `bsab_kg_qa_en/query_frame_runtime/`, `frames/`, `frame_structure_taxonomy/`, `query_rewriting/`
-  query-frame and rewriting runtime
+- `bsab_kg_qa_en/query_rewriting/`
+  query rewriting runtime
 - `tools/`
   selected utility scripts for export and analysis
 
@@ -90,6 +90,24 @@ The demo requires:
 - a reachable Neo4j instance
 - a populated graph matching the expected schema
 - `OPENAI_API_KEY`
+
+## Deploy On Render
+
+Create a Render Web Service from this repository. The included `render.yaml`
+uses:
+
+```bash
+streamlit run bsab_kg_qa_en/app/app_interactive.py --server.address=0.0.0.0 --server.port=$PORT --server.headless=true
+```
+
+Set these Render environment variables:
+
+- `OPENAI_API_KEY`
+- `NEO4J_URI`
+- `NEO4J_USER`
+- `NEO4J_PASSWORD`
+- `NEO4J_DATABASE` if your database is not `neo4j`
+- `OPENAI_MODEL` if you want to override the default model
 
 ## Utility Scripts
 

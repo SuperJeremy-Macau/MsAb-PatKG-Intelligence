@@ -816,6 +816,74 @@ Return strict JSON only: {"intent":"..."}
             "entity_extraction": extraction_debug,
         }
 
+    def _run_intent_query_with_params(
+        self,
+        intent_name: str,
+        question: str,
+        resolved_params: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        extraction_debug: Dict[str, Any] = {"hits": {}, "missing": []}
+        idef = self.registry.get(intent_name)
+        if not idef:
+            return {
+                "intent": intent_name,
+                "question": question,
+                "params": {},
+                "cypher": None,
+                "rows": 0,
+                "graph_results": [],
+                "entity_extraction": extraction_debug,
+            }
+
+        params: Dict[str, Any] = {}
+        for key, schema in idef.params_schema.items():
+            if key in resolved_params and resolved_params[key] not in (None, ""):
+                value = resolved_params[key]
+                if key in {"year", "start_year", "end_year", "years", "min_count", "top_k", "limit", "count"}:
+                    try:
+                        value = int(value)
+                    except Exception:
+                        pass
+                params[key] = value
+                extraction_debug["hits"][key] = {
+                    "value": value,
+                    "matched_by": "confirmed_slot",
+                    "score": 1.0,
+                    "category": "resolved_param",
+                }
+                continue
+
+            if schema.get("required", False):
+                extraction_debug["missing"].append(key)
+                return {
+                    "intent": intent_name,
+                    "question": question,
+                    "params": params,
+                    "cypher": idef.cypher,
+                    "rows": 0,
+                    "graph_results": [],
+                    "missing": key,
+                    "entity_extraction": extraction_debug,
+                }
+
+            if key == "years":
+                params[key] = 3
+            elif key == "min_count":
+                params[key] = 50
+            else:
+                params[key] = None
+
+        graph_results = self.runner.run(idef.cypher, params)
+        return {
+            "intent": intent_name,
+            "question": question,
+            "params": params,
+            "cypher": idef.cypher,
+            "rows": len(graph_results),
+            "graph_results": graph_results,
+            "entity_extraction": extraction_debug,
+        }
+
 
 class AutoCypherOrchestrator(_GraphBaseOrchestrator):
     """LLM + auto-generated Cypher only; no fallback to preset intents."""
@@ -1525,6 +1593,34 @@ class HybridIntentCypherOrchestrator(_GraphBaseOrchestrator):
         return AnswerBundle(
             mode="hybrid_intent_cypher",
             answer="Unable to map the question to a supported preset intent.",
+            debug=debug,
+        )
+
+    def answer_resolved(self, question: str, intent_name: str, resolved_params: Dict[str, Any]) -> AnswerBundle:
+        debug: Dict[str, Any] = {
+            "mode": "hybrid_intent_cypher_resolved",
+            "intent": intent_name,
+            "resolved_params": resolved_params,
+        }
+        result = self._run_intent_query_with_params(intent_name, question, resolved_params)
+        debug.update(
+            {
+                "params": result.get("params"),
+                "entity_extraction": result.get("entity_extraction"),
+                "cypher": result.get("cypher"),
+                "rows": result.get("rows"),
+                "graph_results": result.get("graph_results"),
+            }
+        )
+        if result.get("missing"):
+            ans = self._clarify_missing(str(result["missing"]), intent_name)
+            return AnswerBundle(mode="hybrid_intent_cypher_resolved", answer=ans, debug=debug)
+        if result.get("cypher"):
+            ans = self.synth.answer_with_graph(question, intent_name, result.get("graph_results") or [])
+            return AnswerBundle(mode="hybrid_intent_cypher_resolved", answer=ans, debug=debug)
+        return AnswerBundle(
+            mode="hybrid_intent_cypher_resolved",
+            answer="Unable to execute the resolved query against the configured intent.",
             debug=debug,
         )
 
