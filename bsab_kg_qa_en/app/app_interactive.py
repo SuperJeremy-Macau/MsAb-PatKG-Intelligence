@@ -761,6 +761,8 @@ def _start_example_query(clarifier, flow_service, question: str, intent_name: st
         return _queue_execution(draft)
     if auto_run:
         draft = _advance_toward_execution(draft, clarifier, flow_service, wants_to_run=True, allow_top_intent=True)
+        if draft.flow_state in {"draft_ready", "awaiting_confirmation"} and draft.selected_intent:
+            return _queue_execution(draft)
     return draft
 
 
@@ -1278,6 +1280,7 @@ def _render_introduction_section():
     if not st.session_state.get("scope_acknowledged"):
         if st.button("I understand the scope and want to use the platform", type="primary", use_container_width=True):
             st.session_state.scope_acknowledged = True
+            _set_site_section("Ask")
             st.rerun()
 
 
@@ -1542,6 +1545,7 @@ def _render_scenario_quick_start(clarifier, flow_service):
                             use_container_width=True,
                             disabled=_interaction_locked(),
                         ):
+                            st.session_state.scope_acknowledged = True
                             st.session_state.interactive_draft = _start_example_query(
                                 clarifier,
                                 flow_service,
@@ -2092,7 +2096,8 @@ def main():
         _render_footer()
         return
 
-    cfg, clarifier, flow_service = build_services()
+    with st.spinner("Loading MsAb-PatKG graph services..."):
+        cfg, clarifier, flow_service = build_services()
     st.session_state._clarifier_ref = clarifier
 
     _render_backend_warning(clarifier)
