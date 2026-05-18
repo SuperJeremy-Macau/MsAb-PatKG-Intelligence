@@ -12,6 +12,9 @@ APP_PATH = ROOT / "bsab_kg_qa_en" / "app" / "app_interactive.py"
 def new_app():
     at = AppTest.from_file(str(APP_PATH))
     at.run(timeout=120)
+    if at.button and at.button[0].label == "I understand the scope and want to continue":
+        at.button[0].click()
+        at.run(timeout=180)
     return at
 
 

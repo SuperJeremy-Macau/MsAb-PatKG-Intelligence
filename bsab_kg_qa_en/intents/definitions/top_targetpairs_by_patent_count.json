@@ -1,8 +1,8 @@
 {
   "name": "TOP_TARGETPAIRS_BY_PATENT_COUNT",
-  "description": "Top target pairs ranked by total patent count.",
+  "description": "Top target pairs ranked by total patent count. Non-standard entries without a target-pair separator are excluded from this ranking.",
   "params_schema": {},
-  "cypher": "MATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent) RETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count ORDER BY patent_count DESC, target_pair LIMIT 10;",
+  "cypher": "MATCH (tp:TargetPair)<-[:HAS_TARGET_PAIR]-(p:Patent)\nWHERE tp.name CONTAINS '/'\nRETURN tp.name AS target_pair, count(DISTINCT p) AS patent_count\nORDER BY patent_count DESC, target_pair\nLIMIT 10;",
   "result_schema": {
     "target_pair": "Target pair",
     "patent_count": "Patent count"

@@ -42,6 +42,7 @@ Rules:
 - Use only MATCH/OPTIONAL MATCH/WHERE/WITH/RETURN/ORDER BY/LIMIT.
 - Do not use CREATE/MERGE/DELETE/DETACH/SET/DROP/CALL/APOC/LOAD CSV.
 - Always include LIMIT <= 50.
+- For target-pair ranking, diversity, count, or functional-combination analyses, exclude unresolved placeholder categories by requiring tp.name CONTAINS '/'.
 - Do not include triple backticks or any extra text.
 
 Cypher query:
@@ -66,6 +67,7 @@ Rules:
 - Use only MATCH/OPTIONAL MATCH/WHERE/WITH/RETURN/ORDER BY/LIMIT.
 - Do not use CREATE/MERGE/DELETE/DETACH/SET/DROP/CALL/APOC/LOAD CSV.
 - Always include LIMIT <= 50.
+- For target-pair ranking, diversity, count, or functional-combination analyses, exclude unresolved placeholder categories by requiring tp.name CONTAINS '/'.
 - Do not include triple backticks or any extra text.
 
 Cypher query:
@@ -89,6 +91,7 @@ Rules:
 - Use only MATCH/OPTIONAL MATCH/WHERE/WITH/RETURN/ORDER BY/LIMIT.
 - Do not use CREATE/MERGE/DELETE/DETACH/SET/DROP/CALL/APOC/LOAD CSV.
 - Always include LIMIT <= 50.
+- For target-pair ranking, diversity, count, or functional-combination analyses, exclude unresolved placeholder categories by requiring tp.name CONTAINS '/'.
 - Do not include triple backticks or any extra text.
 
 Cypher query:
@@ -194,6 +197,36 @@ class _GraphBaseOrchestrator:
         self.extractor: Optional[EntityExtractor] = self.ner.extractor
         self._llm_ner_cache: Dict[str, Dict[str, ExtractMatch]] = {}
         self._last_nl2cypher_raw: Optional[str] = None
+
+    def _apply_resolved_targetpair_scope(self, cypher: str) -> Tuple[str, bool]:
+        """Exclude unresolved target-pair placeholders from broad target-pair analyses."""
+        if not cypher or "(tp:TargetPair" not in cypher:
+            return cypher, False
+        if "tp.name CONTAINS '/'" in cypher:
+            return cypher, True
+        if re.search(r":TargetPair\s*\{\s*name\s*:", cypher):
+            return cypher, False
+
+        match = re.search(r"\(tp:TargetPair[^)]*\)", cypher)
+        if not match:
+            return cypher, False
+
+        boundary = re.search(
+            r"\s+(OPTIONAL\s+MATCH|MATCH|WITH|RETURN|WHERE)\b",
+            cypher[match.end():],
+            flags=re.IGNORECASE,
+        )
+        if not boundary:
+            return cypher.rstrip(";") + " WHERE tp.name CONTAINS '/';", True
+
+        boundary_start = match.end() + boundary.start()
+        boundary_end = match.end() + boundary.end()
+        clause = boundary.group(1).upper()
+        if clause == "WHERE":
+            filtered = cypher[:boundary_start] + " WHERE tp.name CONTAINS '/' AND" + cypher[boundary_end:]
+        else:
+            filtered = cypher[:boundary_start] + " WHERE tp.name CONTAINS '/'" + cypher[boundary_start:]
+        return filtered, True
 
     def _init_extractor(self, max_retries: int = 2) -> None:
         self.ner.init_extractor(max_retries=max_retries)
@@ -805,14 +838,16 @@ Return strict JSON only: {"intent":"..."}
             else:
                 params[key] = None
 
-        graph_results = self.runner.run(idef.cypher, params)
+        cypher, resolved_targetpair_scope = self._apply_resolved_targetpair_scope(idef.cypher)
+        graph_results = self.runner.run(cypher, params)
         return {
             "intent": intent_name,
             "question": question,
             "params": params,
-            "cypher": idef.cypher,
+            "cypher": cypher,
             "rows": len(graph_results),
             "graph_results": graph_results,
+            "resolved_targetpair_scope": resolved_targetpair_scope,
             "entity_extraction": extraction_debug,
         }
 
@@ -873,14 +908,16 @@ Return strict JSON only: {"intent":"..."}
             else:
                 params[key] = None
 
-        graph_results = self.runner.run(idef.cypher, params)
+        cypher, resolved_targetpair_scope = self._apply_resolved_targetpair_scope(idef.cypher)
+        graph_results = self.runner.run(cypher, params)
         return {
             "intent": intent_name,
             "question": question,
             "params": params,
-            "cypher": idef.cypher,
+            "cypher": cypher,
             "rows": len(graph_results),
             "graph_results": graph_results,
+            "resolved_targetpair_scope": resolved_targetpair_scope,
             "entity_extraction": extraction_debug,
         }
 
@@ -1039,6 +1076,7 @@ Output strict JSON list:
 Rules:
 - Use only MATCH/OPTIONAL MATCH/WHERE/WITH/RETURN/ORDER BY/LIMIT
 - Must include LIMIT <= 50
+- For target-pair ranking, diversity, count, or functional-combination analyses, exclude unresolved placeholder categories by requiring tp.name CONTAINS '/'
 - No CREATE/MERGE/DELETE/SET/CALL/APOC/LOAD CSV
 """
         user_prompt = f"Question: {question}"
@@ -1070,6 +1108,7 @@ Schema:
 {schema_text}
 Output strict JSON: {{"cypher":"...","params":{{...}}}}
 Always include LIMIT <= 50.
+For target-pair ranking, diversity, count, or functional-combination analyses, exclude unresolved placeholder categories by requiring tp.name CONTAINS '/'.
 """
             text2 = self.llm.chat(system_prompt_single.strip(), user_prompt, temperature=0.0)
             text2 = re.sub(r"^```json\s*|\s*```$", "", text2.strip(), flags=re.MULTILINE).strip()
@@ -1148,6 +1187,7 @@ Always include LIMIT <= 50.
             params = item.get("params", {}) or {}
             if re.search(r"\bLIMIT\b", cypher, flags=re.IGNORECASE) is None:
                 cypher = cypher.rstrip(";") + "\nLIMIT 50;"
+            cypher, resolved_targetpair_scope = self._apply_resolved_targetpair_scope(cypher)
             try:
                 self._validate_cypher_strict(cypher)
                 rows = self.runner.run(cypher, params)
@@ -1159,6 +1199,7 @@ Always include LIMIT <= 50.
                     "rows": rows,
                     "score": s,
                     "source": src,
+                    "resolved_targetpair_scope": resolved_targetpair_scope,
                 }
                 if best is None or pack["score"] > best["score"]:
                     best = pack
@@ -1184,6 +1225,7 @@ Always include LIMIT <= 50.
                 "graph_results": best["rows"],
                 "candidate_score": best["score"],
                 "candidate_source": best["source"],
+                "resolved_targetpair_scope": bool(best.get("resolved_targetpair_scope")),
             }
         )
         ans = self.synth.answer_with_graph(question, "AUTO_CYPHER", best["rows"])
@@ -1268,13 +1310,20 @@ class Neo4j_Text2CypherRetriever(_GraphBaseOrchestrator):
 
         cypher = pack["cypher"]
         params = pack.get("params") or {}
+        cypher, resolved_targetpair_scope = self._apply_resolved_targetpair_scope(cypher)
         try:
             self._validate_cypher_strict(cypher)
             rows = self.runner.run(cypher, params)
         except Exception:
             return AnswerBundle(mode="neo4j_text2cypher_retriever", answer="Unable to recognize the query and generate a safe Cypher.", debug=debug)
 
-        debug.update({"cypher": cypher, "params": params, "rows": len(rows), "graph_results": rows})
+        debug.update({
+            "cypher": cypher,
+            "params": params,
+            "rows": len(rows),
+            "graph_results": rows,
+            "resolved_targetpair_scope": resolved_targetpair_scope,
+        })
         ans = self.synth.answer_with_graph(question, "NEO4J_TEXT2CYPHER_RETRIEVER", rows)
         return AnswerBundle(mode="neo4j_text2cypher_retriever", answer=ans, debug=debug)
 
@@ -1374,6 +1423,7 @@ class QueryRewritingNeo4jText2CypherRetriever(Neo4j_Text2CypherRetriever):
 
         cypher = pack["cypher"]
         params = pack.get("params") or {}
+        cypher, resolved_targetpair_scope = self._apply_resolved_targetpair_scope(cypher)
         try:
             self._validate_cypher_strict(cypher)
             rows = self._run_cypher_with_retry(cypher, params)
@@ -1385,7 +1435,13 @@ class QueryRewritingNeo4jText2CypherRetriever(Neo4j_Text2CypherRetriever):
                 debug=debug,
             )
 
-        debug.update({"cypher": cypher, "params": params, "rows": len(rows), "graph_results": rows})
+        debug.update({
+            "cypher": cypher,
+            "params": params,
+            "rows": len(rows),
+            "graph_results": rows,
+            "resolved_targetpair_scope": resolved_targetpair_scope,
+        })
         ans = self.synth.answer_with_graph(question, "QUERY_REWRITING_NEO4J_TEXT2CYPHER_RETRIEVER", rows)
         return AnswerBundle(mode="query_rewriting_neo4j_text2cypher_retriever", answer=ans, debug=debug)
 
